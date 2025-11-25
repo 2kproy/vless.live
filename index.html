@@ -616,26 +616,51 @@
       <div class="lab-card">
         <div class="pill" data-i18n-key="labConfigTag">starter kit</div>
         <h3 data-i18n-key="labConfigTitle">Стартовый шаблон</h3>
-        <p data-i18n-key="labConfigText">Нужен быстрый вход? Копируй основу, меняй айдишник и домен, пробуй Reality или XHTTP.</p>
+        <p data-i18n-key="labConfigText">Более реальный базовый inbound на Reality: подставь ключ, serverNames и цель, дальше настраивай под себя.</p>
         <pre class="code" aria-label="VLESS starter config"><code data-i18n-key="labConfigCode">{
-  "inbounds": [{
-    "protocol": "vless",
-    "settings": { "clients": [{ "id": "uuid-here" }] },
-    "streamSettings": { "network": "grpc", "security": "reality" }
-  }],
-  "outbounds": [{ "protocol": "freedom" }]
+  "inbounds": [
+    {
+      "tag": "VLESS_TCP_REALITY",
+      "port": 443,
+      "listen": "0.0.0.0",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "network": "raw",
+        "security": "reality",
+        "realitySettings": {
+          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",
+          "show": false,
+          "xver": 0,
+          "shortIds": [
+            ""
+          ],
+          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",
+          "serverNames": [
+            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"
+          ]
+        }
+      }
+    }
+  ]
 }</code></pre>
       </div>
 
       <div class="lab-card">
-        <div class="pill" data-i18n-key="labIdeasTag">дальше</div>
-        <h3 data-i18n-key="labIdeasTitle">Что ещё добавить?</h3>
-        <ul class="idea-list">
-          <li data-i18n-key="labIdeaOne">Мини-холл славы с топовыми конфига-авторами и ссылками на гайды.</li>
-          <li data-i18n-key="labIdeaTwo">Тестовый переключатель тем: неон, темнота, кибердень.</li>
-          <li data-i18n-key="labIdeaThree">Сборник пресетов маршрутизации для разных провайдеров.</li>
-          <li data-i18n-key="labIdeaFour">Форма «поделиться ссылкой» — чтобы закидывать друзьям готовый QR.</li>
-        </ul>
+        <div class="pill" data-i18n-key="labPurposeTag">зачем</div>
+        <h3 data-i18n-key="labPurposeTitle">Зачем этот сайт</h3>
+        <p data-i18n-key="labPurposeText" data-i18n-html="true">Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: кидай PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.</p>
       </div>
     </div>
   </section>
@@ -697,14 +722,11 @@
         labMeterThroughput: 'Пропускная',
         labConfigTag: 'starter kit',
         labConfigTitle: 'Стартовый шаблон',
-        labConfigText: 'Нужен быстрый вход? Копируй основу, меняй айдишник и домен, пробуй Reality или XHTTP.',
-        labConfigCode: '{\n  "inbounds": [{\n    "protocol": "vless",\n    "settings": { "clients": [{ "id": "uuid-here" }] },\n    "streamSettings": { "network": "grpc", "security": "reality" }\n  }],\n  "outbounds": [{ "protocol": "freedom" }]\n}',
-        labIdeasTag: 'дальше',
-        labIdeasTitle: 'Что ещё добавить?',
-        labIdeaOne: 'Мини-холл славы с топовыми конфига-авторами и ссылками на гайды.',
-        labIdeaTwo: 'Тестовый переключатель тем: неон, темнота, кибердень.',
-        labIdeaThree: 'Сборник пресетов маршрутизации для разных провайдеров.',
-        labIdeaFour: 'Форма «поделиться ссылкой» — чтобы закидывать друзьям готовый QR.'
+        labConfigText: 'Более реальный базовый inbound на Reality: подставь ключ, serverNames и цель, дальше настраивай под себя.',
+        labConfigCode: '{\n  "inbounds": [\n    {\n      "tag": "VLESS_TCP_REALITY",\n      "port": 443,\n      "listen": "0.0.0.0",\n      "protocol": "vless",\n      "settings": {\n        "clients": [],\n        "decryption": "none"\n      },\n      "sniffing": {\n        "enabled": true,\n        "destOverride": [\n          "http",\n          "tls",\n          "quic"\n        ]\n      },\n      "streamSettings": {\n        "network": "raw",\n        "security": "reality",\n        "realitySettings": {\n          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",\n          "show": false,\n          "xver": 0,\n          "shortIds": [\n            ""\n          ],\n          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",\n          "serverNames": [\n            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"\n          ]\n        }\n      }\n    }\n  ]\n}',
+        labPurposeTag: 'зачем',
+        labPurposeTitle: 'Зачем этот сайт',
+        labPurposeText: 'Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: кидай PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.'
       },
       en: {
         badge: 'vless.live / immortal signal',
@@ -748,14 +770,11 @@
         labMeterThroughput: 'Throughput',
         labConfigTag: 'starter kit',
         labConfigTitle: 'Starter template',
-        labConfigText: 'Need a fast entry? Copy the base, swap your UUID and domain, try Reality or XHTTP.',
-        labConfigCode: '{\n  "inbounds": [{\n    "protocol": "vless",\n    "settings": { "clients": [{ "id": "uuid-here" }] },\n    "streamSettings": { "network": "grpc", "security": "reality" }\n  }],\n  "outbounds": [{ "protocol": "freedom" }]\n}',
-        labIdeasTag: 'next',
-        labIdeasTitle: 'What else to add?',
-        labIdeaOne: 'Mini hall of fame with top config authors and guide links.',
-        labIdeaTwo: 'Theme switch sandbox: neon, blackout, daylight.',
-        labIdeaThree: 'Routing presets bundle for different ISPs and regions.',
-        labIdeaFour: '“Share this link” form to push ready-made QR codes to friends.'
+        labConfigText: 'A more realistic Reality inbound base: drop your key, serverNames, and target, then tune the rest.',
+        labConfigCode: '{\n  "inbounds": [\n    {\n      "tag": "VLESS_TCP_REALITY",\n      "port": 443,\n      "listen": "0.0.0.0",\n      "protocol": "vless",\n      "settings": {\n        "clients": [],\n        "decryption": "none"\n      },\n      "sniffing": {\n        "enabled": true,\n        "destOverride": [\n          "http",\n          "tls",\n          "quic"\n        ]\n      },\n      "streamSettings": {\n        "network": "raw",\n        "security": "reality",\n        "realitySettings": {\n          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",\n          "show": false,\n          "xver": 0,\n          "shortIds": [\n            ""\n          ],\n          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",\n          "serverNames": [\n            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"\n          ]\n        }\n      }\n    }\n  ]\n}',
+        labPurposeTag: 'why',
+        labPurposeTitle: 'Why this site exists',
+        labPurposeText: 'Built as a playful shout that VLESS is alive. If the community wants, we can keep it rolling together: drop PRs to the <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">repo</a>. The plan: stash configs, links, and new finds right here.'
       }
     };
 
@@ -768,8 +787,9 @@
       i18nElements.forEach(el => {
         const key = el.dataset.i18nKey;
         if (pack[key]) {
-          if (el.tagName.toLowerCase() === 'a') {
-            el.textContent = pack[key];
+          const useHtml = el.dataset.i18nHtml !== undefined;
+          if (useHtml) {
+            el.innerHTML = pack[key];
           } else {
             el.textContent = pack[key];
           }
