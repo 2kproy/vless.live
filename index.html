@@ -322,8 +322,34 @@
       color: #cfe8ff;
       font-size: 13px;
       line-height: 1.5;
-      overflow-x: auto;
+      overflow: auto;
       box-shadow: inset 0 0 30px rgba(68, 209, 255, 0.12);
+      max-height: 240px;
+      width: calc(100% + 32px);
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+
+    .repo-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(68, 209, 255, 0.12);
+      border: 1px solid rgba(68, 209, 255, 0.3);
+      border-radius: 12px;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      margin-top: 10px;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+
+    .repo-button:hover {
+      border-color: rgba(255, 79, 246, 0.45);
+      transform: translateY(-2px);
     }
 
     .idea-list {
@@ -660,7 +686,8 @@
       <div class="lab-card">
         <div class="pill" data-i18n-key="labPurposeTag">зачем</div>
         <h3 data-i18n-key="labPurposeTitle">Зачем этот сайт</h3>
-        <p data-i18n-key="labPurposeText" data-i18n-html="true">Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: кидай PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.</p>
+        <p data-i18n-key="labPurposeText" data-i18n-html="true">Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: предлагай issue и PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.</p>
+        <a class="repo-button" data-i18n-key="labPurposeCta" href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">Открыть репозиторий</a>
       </div>
     </div>
   </section>
@@ -726,7 +753,8 @@
         labConfigCode: '{\n  "inbounds": [\n    {\n      "tag": "VLESS_TCP_REALITY",\n      "port": 443,\n      "listen": "0.0.0.0",\n      "protocol": "vless",\n      "settings": {\n        "clients": [],\n        "decryption": "none"\n      },\n      "sniffing": {\n        "enabled": true,\n        "destOverride": [\n          "http",\n          "tls",\n          "quic"\n        ]\n      },\n      "streamSettings": {\n        "network": "raw",\n        "security": "reality",\n        "realitySettings": {\n          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",\n          "show": false,\n          "xver": 0,\n          "shortIds": [\n            ""\n          ],\n          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",\n          "serverNames": [\n            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"\n          ]\n        }\n      }\n    }\n  ]\n}',
         labPurposeTag: 'зачем',
         labPurposeTitle: 'Зачем этот сайт',
-        labPurposeText: 'Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: кидай PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.'
+        labPurposeText: 'Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: предлагай issue и PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.',
+        labPurposeCta: 'Открыть репозиторий'
       },
       en: {
         badge: 'vless.live / immortal signal',
@@ -774,7 +802,8 @@
         labConfigCode: '{\n  "inbounds": [\n    {\n      "tag": "VLESS_TCP_REALITY",\n      "port": 443,\n      "listen": "0.0.0.0",\n      "protocol": "vless",\n      "settings": {\n        "clients": [],\n        "decryption": "none"\n      },\n      "sniffing": {\n        "enabled": true,\n        "destOverride": [\n          "http",\n          "tls",\n          "quic"\n        ]\n      },\n      "streamSettings": {\n        "network": "raw",\n        "security": "reality",\n        "realitySettings": {\n          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",\n          "show": false,\n          "xver": 0,\n          "shortIds": [\n            ""\n          ],\n          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",\n          "serverNames": [\n            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"\n          ]\n        }\n      }\n    }\n  ]\n}',
         labPurposeTag: 'why',
         labPurposeTitle: 'Why this site exists',
-        labPurposeText: 'Built as a playful shout that VLESS is alive. If the community wants, we can keep it rolling together: drop PRs to the <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">repo</a>. The plan: stash configs, links, and new finds right here.'
+        labPurposeText: 'Built as a playful shout that VLESS is alive. If the community wants, we can keep it rolling together: open issues and PRs in the <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">repo</a>. The plan: stash configs, links, and new finds right here.',
+        labPurposeCta: 'Open the repo'
       }
     };
 
