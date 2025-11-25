@@ -51,6 +51,38 @@
       z-index: 1;
     }
 
+    .lang-toggle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 4;
+      display: inline-flex;
+      background: rgba(16, 23, 43, 0.82);
+      border: 1px solid rgba(68, 209, 255, 0.35);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+    }
+
+    .lang-toggle button {
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease;
+      font-family: 'Inter', 'Space Grotesk', system-ui, sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .lang-toggle button.active {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0b0f1a;
+    }
+
     @keyframes scan {
       0% { transform: translateY(-10%); }
       100% { transform: translateY(10%); }
@@ -338,98 +370,91 @@
       .grid { padding: 24px 18px; }
       .timeline { padding: 0 18px; }
       .corner-thanks { position: static; margin: 12px auto 0; max-width: 320px; }
+      .lang-toggle { top: 12px; right: 12px; }
     }
   </style>
 </head>
 <body class="scan-lines">
   <div class="floating-runes" aria-hidden="true"></div>
 
+  <div class="lang-toggle" aria-label="Language switcher">
+    <button type="button" data-lang="ru" class="active">RU</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
   <header>
     <div class="hero">
-      <div class="badge">vless.live / immortals only</div>
-      <h1>VLESS жив. Бессмертный. Неподконтрольный.</h1>
-      <p>Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.</p>
-      <a class="cta" href="https://github.com/search?q=vless" target="_blank" rel="noreferrer">Зарядиться энергией</a>
+      <div class="badge" data-i18n-key="badge">vless.live / immortals only</div>
+      <h1 data-i18n-key="heroTitle">VLESS жив. Бессмертный. Неподконтрольный.</h1>
+      <p data-i18n-key="heroText">Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.</p>
+      <a class="cta" data-i18n-key="cta" href="https://github.com/search?q=vless" target="_blank" rel="noreferrer">Зарядиться энергией</a>
     </div>
   </header>
 
   <section class="grid">
     <div class="card">
-      <h3>Анти-RIP</h3>
-      <p>Забудь о надгробиях. vless.live — яркая противоположность vless.rip. Мы не вспоминаем прошлое, мы разгоняем настоящее и поджигаем будущее.</p>
+      <h3 data-i18n-key="cardAliveTitle">Живой манифест</h3>
+      <p data-i18n-key="cardAliveText">Без траура и RIP. vless.live — шумный световой сигнал, что VLESS не похоронить. Мы не смотрим назад, мы разгоняем настоящее и поджигаем будущее.</p>
     </div>
     <div class="card">
-      <h3>Гибкость & скорость</h3>
-      <p>Минималистичный протокол, который любит свободу конфигурации. Быстро подстраивается под любые сетевые лабиринты и держит связь там, где другие угасают.</p>
+      <h3 data-i18n-key="cardSpeedTitle">Гибкость & скорость</h3>
+      <p data-i18n-key="cardSpeedText">Минималистичный протокол, который любит свободу конфигурации. Быстро подстраивается под любые сетевые лабиринты и держит связь там, где другие угасают.</p>
     </div>
     <div class="card">
-      <h3>Стелс режим</h3>
-      <p>VLESS умеет маскироваться. Добавь любимый транспорт, выбери свой стиль шифрования и оставайся невидимым. Мы — тени, которые сияют.</p>
+      <h3 data-i18n-key="cardStealthTitle">Стелс режим</h3>
+      <p data-i18n-key="cardStealthText">VLESS умеет маскироваться. Добавь любимый транспорт, выбери свой стиль шифрования и оставайся невидимым. Мы — тени, которые сияют.</p>
     </div>
     <div class="card">
-      <h3>Комьюнити-форсаж</h3>
-      <p>Открытый код, открытые идеи. Люди по всему миру прокачивают конфиги, пишут клиенты и держат огонь. Ты уже часть этой команды.</p>
+      <h3 data-i18n-key="cardCommunityTitle">Комьюнити-форсаж</h3>
+      <p data-i18n-key="cardCommunityText">Открытый код, открытые идеи. Люди по всему миру прокачивают конфиги, пишут клиенты и держат огонь. Ты уже часть этой команды.</p>
     </div>
   </section>
 
   <section class="timeline">
-    <h2>Как мы держим линию</h2>
+    <h2 data-i18n-key="timelineTitle">Как мы держим линию</h2>
     <div class="timeline-list">
       <div class="timeline-item">
-        <h4>01. Разносим ограничения</h4>
-        <span>Встраиваемся в любые сценарии: self-hosted, домашние роутеры или облако на краю.</span>
+        <h4 data-i18n-key="timeline1Title">01. Разносим ограничения</h4>
+        <span data-i18n-key="timeline1Text">Встраиваемся в любые сценарии: self-hosted, домашние роутеры или облако на краю.</span>
       </div>
       <div class="timeline-item">
-        <h4>02. Тюним как хотим</h4>
-        <span>WebSocket, gRPC, Reality, H2 — выбирай транспорт, меняй обёртку, оставайся онлайн.</span>
+        <h4 data-i18n-key="timeline2Title">02. Тюним как хотим</h4>
+        <span data-i18n-key="timeline2Text">WebSocket, gRPC, Reality, HTTP/2 или XHTTP — выбирай транспорт, меняй обёртку, оставайся онлайн.</span>
       </div>
       <div class="timeline-item">
-        <h4>03. Маскируем трафик</h4>
-        <span>Нативная гибкость для обхода цензуры. VLESS выглядит так, как нужно тебе.</span>
+        <h4 data-i18n-key="timeline3Title">03. Маскируем трафик</h4>
+        <span data-i18n-key="timeline3Text">Нативная гибкость для обхода цензуры. VLESS выглядит так, как нужно тебе.</span>
       </div>
       <div class="timeline-item">
-        <h4>04. Живём в коде</h4>
-        <span>Форки, плагины, патчи. Комьюнити — бесконечный двигатель, который не умеет останавливаться.</span>
+        <h4 data-i18n-key="timeline4Title">04. Живём в коде</h4>
+        <span data-i18n-key="timeline4Text">Форки, плагины, патчи. Комьюнити — бесконечный двигатель, который не умеет останавливаться.</span>
       </div>
     </div>
   </section>
 
   <section class="grid" aria-label="Комьюнити">
     <div class="card">
-      <h3>Сила в людях</h3>
-      <p>Разработчики, девопсы, энтузиасты — каждый добавляет свою искру. Здесь ценится любая помощь: баг-репорт или новый клиент.</p>
+      <h3 data-i18n-key="cardPeopleTitle">Сила в людях</h3>
+      <p data-i18n-key="cardPeopleText">Разработчики, девопсы, энтузиасты — каждый добавляет свою искру. Здесь ценится любая помощь: баг-репорт или новый клиент.</p>
     </div>
     <div class="card">
-      <h3>DIY дух</h3>
-      <p>Подними свой сервер, настрой балансировщики, сочини автоматизацию. VLESS принимает твой стиль без вопросов.</p>
+      <h3 data-i18n-key="cardDiyTitle">DIY дух</h3>
+      <p data-i18n-key="cardDiyText">Подними свой сервер, настрой балансировщики, сочини автоматизацию. VLESS принимает твой стиль без вопросов.</p>
     </div>
     <div class="card">
-      <h3>Марвеловский вайб</h3>
-      <p>Эпичные цвета, светящиеся акценты и ощущение вечного движения. Мы — не траур, мы — премьера нового сезона.</p>
+      <h3 data-i18n-key="cardVibeTitle">Марвеловский вайб</h3>
+      <p data-i18n-key="cardVibeText">Эпичные цвета, светящиеся акценты и ощущение вечного движения. Мы — не траур, мы — премьера нового сезона.</p>
     </div>
     <div class="card">
-      <h3>Присоединяйся</h3>
-      <p>Запусти ноду, сделай гайд, расскажи друзьям. Не важно, где ты — VLESS живёт там, где есть ты.</p>
+      <h3 data-i18n-key="cardJoinTitle">Присоединяйся</h3>
+      <p data-i18n-key="cardJoinText">Запусти ноду, сделай гайд, расскажи друзьям. Не важно, где ты — VLESS живёт там, где есть ты.</p>
     </div>
   </section>
 
   <footer class="footer">
-    <h2>Большая благодарность комьюнити</h2>
-    <p>Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.</p>
-    <div class="names">
-      <span class="name-chip">stormbyte</span>
-      <span class="name-chip">nova42</span>
-      <span class="name-chip">netghost</span>
-      <span class="name-chip">ravenroot</span>
-      <span class="name-chip">ciphercat</span>
-      <span class="name-chip">packetrider</span>
-      <span class="name-chip">lumenix</span>
-      <span class="name-chip">zero-lag</span>
-      <span class="name-chip">matrixfox</span>
-      <span class="name-chip">xraypilot</span>
-      <span class="name-chip">bytegeist</span>
-      <span class="name-chip">stardust</span>
-    </div>
+    <h2 data-i18n-key="communityTitle">Большая благодарность комьюнити</h2>
+    <p data-i18n-key="communityText">Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.</p>
+    <div class="names" id="names"></div>
   </footer>
 
   <div class="corner-thanks">
@@ -440,9 +465,153 @@
   </div>
 
   <script>
-    // Добавляем случайные руны/символы для ощущения кибер-жизни
+    const translations = {
+      ru: {
+        badge: 'vless.live / бессмертный сигнал',
+        heroTitle: 'VLESS жив. Бессмертный. Неподконтрольный.',
+        heroText: 'Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.',
+        cta: 'Зарядиться энергией',
+        cardAliveTitle: 'Живой манифест',
+        cardAliveText: 'Без траура и RIP. vless.live — шумный световой сигнал, что VLESS не похоронить. Мы не смотрим назад, мы разгоняем настоящее и поджигаем будущее.',
+        cardSpeedTitle: 'Гибкость & скорость',
+        cardSpeedText: 'Минималистичный протокол, который любит свободу конфигурации. Быстро подстраивается под любые сетевые лабиринты и держит связь там, где другие угасают.',
+        cardStealthTitle: 'Стелс режим',
+        cardStealthText: 'VLESS умеет маскироваться. Добавь любимый транспорт, выбери свой стиль шифрования и оставайся невидимым. Мы — тени, которые сияют.',
+        cardCommunityTitle: 'Комьюнити-форсаж',
+        cardCommunityText: 'Открытый код, открытые идеи. Люди по всему миру прокачивают конфиги, пишут клиенты и держат огонь. Ты уже часть этой команды.',
+        timelineTitle: 'Как мы держим линию',
+        timeline1Title: '01. Разносим ограничения',
+        timeline1Text: 'Встраиваемся в любые сценарии: self-hosted, домашние роутеры или облако на краю.',
+        timeline2Title: '02. Тюним как хотим',
+        timeline2Text: 'WebSocket, gRPC, Reality, HTTP/2 или XHTTP — выбирай транспорт, меняй обёртку, оставайся онлайн.',
+        timeline3Title: '03. Маскируем трафик',
+        timeline3Text: 'Нативная гибкость для обхода цензуры. VLESS выглядит так, как нужно тебе.',
+        timeline4Title: '04. Живём в коде',
+        timeline4Text: 'Форки, плагины, патчи. Комьюнити — бесконечный двигатель, который не умеет останавливаться.',
+        cardPeopleTitle: 'Сила в людях',
+        cardPeopleText: 'Разработчики, девопсы, энтузиасты — каждый добавляет свою искру. Здесь ценится любая помощь: баг-репорт или новый клиент.',
+        cardDiyTitle: 'DIY дух',
+        cardDiyText: 'Подними свой сервер, настрой балансировщики, сочини автоматизацию. VLESS принимает твой стиль без вопросов.',
+        cardVibeTitle: 'Марвеловский вайб',
+        cardVibeText: 'Эпичные цвета, светящиеся акценты и ощущение вечного движения. Мы — не траур, мы — премьера нового сезона.',
+        cardJoinTitle: 'Присоединяйся',
+        cardJoinText: 'Запусти ноду, сделай гайд, расскажи друзьям. Не важно, где ты — VLESS живёт там, где есть ты.',
+        communityTitle: 'Большая благодарность комьюнити',
+        communityText: 'Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.'
+      },
+      en: {
+        badge: 'vless.live / immortal signal',
+        heroTitle: 'VLESS is alive. Immortal. Unstoppable.',
+        heroText: 'Not a memorial — a manifesto. A protocol that keeps evolving, smashing old barriers, and giving freedom to every connection. Here we celebrate the resilience of VLESS and everyone who fuels it.',
+        cta: 'Charge up',
+        cardAliveTitle: 'Living manifesto',
+        cardAliveText: 'No funerals, no RIP. vless.live is a loud neon flare that VLESS can’t be buried. We don’t look back — we accelerate the present and ignite the future.',
+        cardSpeedTitle: 'Agile & fast',
+        cardSpeedText: 'A minimalist protocol that loves configuration freedom. It adapts to any network maze and keeps the link alive where others fade.',
+        cardStealthTitle: 'Stealth mode',
+        cardStealthText: 'VLESS can blend in. Pick your transport, pick your encryption vibe, stay invisible. We’re the shadows that shine.',
+        cardCommunityTitle: 'Community overdrive',
+        cardCommunityText: 'Open code, open ideas. People worldwide tweak configs, ship clients, and keep the fire blazing. You’re already on the squad.',
+        timelineTitle: 'How we hold the line',
+        timeline1Title: '01. Breaking limits',
+        timeline1Text: 'We slot into any setup: self-hosted boxes, home routers, or edge cloud.',
+        timeline2Title: '02. Tuned our way',
+        timeline2Text: 'WebSocket, gRPC, Reality, HTTP/2 or XHTTP — pick the transport, wrap it how you like, stay online.',
+        timeline3Title: '03. Disguising traffic',
+        timeline3Text: 'Native flexibility to dodge censorship. VLESS looks exactly how you need it to.',
+        timeline4Title: '04. We live in code',
+        timeline4Text: 'Forks, plugins, patches. The community is a perpetual engine that refuses to stop.',
+        cardPeopleTitle: 'Power is people',
+        cardPeopleText: 'Developers, devops, enthusiasts — everyone adds a spark. Any help counts: a bug report or a brand-new client.',
+        cardDiyTitle: 'DIY spirit',
+        cardDiyText: 'Run your own server, tune balancers, script automation. VLESS welcomes your style without questions.',
+        cardVibeTitle: 'Marvel vibe',
+        cardVibeText: 'Epic colors, glowing accents, and the feeling of endless motion. This isn’t a funeral — it’s a season premiere.',
+        cardJoinTitle: 'Jump in',
+        cardJoinText: 'Spin up a node, write a guide, tell your friends. Wherever you are, VLESS lives where you do.',
+        communityTitle: 'Massive thanks to the community',
+        communityText: 'Every nickname is a spark that keeps VLESS fighting. Thanks for making the protocol immortal.'
+      }
+    };
+
+    const langButtons = document.querySelectorAll('.lang-toggle button');
+    const i18nElements = document.querySelectorAll('[data-i18n-key]');
+
+    const applyLang = (lang) => {
+      const pack = translations[lang] || translations.ru;
+      document.documentElement.lang = lang;
+      i18nElements.forEach(el => {
+        const key = el.dataset.i18nKey;
+        if (pack[key]) {
+          if (el.tagName.toLowerCase() === 'a') {
+            el.textContent = pack[key];
+          } else {
+            el.textContent = pack[key];
+          }
+        }
+      });
+      langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+      localStorage.setItem('vless-live-lang', lang);
+    };
+
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    const savedLang = localStorage.getItem('vless-live-lang') || 'ru';
+    applyLang(savedLang);
+
+    const nameContainer = document.getElementById('names');
+    const seedNames = [
+      'stormbyte', 'nova42', 'netghost', 'ravenroot', 'ciphercat', 'packetrider', 'lumenix', 'zero-lag', 'matrixfox', 'xraypilot', 'bytegeist', 'stardust',
+      'remnowave', 'kastov', 'remnashop', 'snoups', 'yoxify', '2kproy', 'quantumflux', 'shadowline', 'meshrunner', 'warpdrive', 'edgeknight', 'vectorbolt',
+      '流火', '黑狐', '幽蓝', '极光雨', '雷影', '量子猫', '暮光行者', '星尘流', '北极光', '风暴客'
+    ];
+
+    const prefixes = ['neo', 'cyber', 'astro', 'meta', 'pulse', 'flux', 'hyper', 'ghost', 'zero', 'storm', 'nano', 'ultra', 'shadow', 'quant', 'lumen', 'xeno', 'byte', 'nova', 'vector', 'vortex', 'photon', 'silk', 'jade', 'ember', 'sky', 'crimson', 'violet', 'onyx', 'azure', 'jade', 'cryo', 'flare', 'infra', 'turbo', 'chrono'];
+    const suffixes = ['runner', 'blade', 'spark', 'drift', 'pilot', 'walker', 'caster', 'weaver', 'rider', 'carrier', 'shift', 'phase', 'dance', 'surge', 'pulse', 'loop', 'drive', 'trace', 'net', 'spear', 'bolt', 'signal', 'link', 'crest', 'flare', 'step', 'path', 'stream', 'dash', 'orbit'];
+    const special = ['红莲', '青霜', '夜空', '晨星', '银翼', '蓝图', '霓光', '光速', '深海', '山海', '竹影', '雷霆', '云端', '幻影', '星河', '疾风', '电弧', '量子', '磁暴', '雪豹', '极昼', '暮色', '烁星', '风行', '星痕'];
+
+    const allNames = new Set(seedNames);
+    const targetCount = 980;
+
+    for (const pre of prefixes) {
+      for (const suf of suffixes) {
+        if (allNames.size >= targetCount) break;
+        allNames.add(`${pre}${suf}`);
+      }
+      if (allNames.size >= targetCount) break;
+    }
+
+    let idx = 0;
+    while (allNames.size < targetCount && idx < special.length * 6) {
+      const name = `${special[idx % special.length]}-${Math.floor(idx / special.length) + 1}`;
+      allNames.add(name);
+      idx++;
+    }
+
+    const numberTrail = ['_01', '_07', '_13', '_21', '_33', '_44', '_56', '_64', '_77', '_88', '_99'];
+    for (const base of [...allNames]) {
+      if (allNames.size >= targetCount) break;
+      numberTrail.forEach(tag => {
+        if (allNames.size < targetCount) {
+          allNames.add(`${base}${tag}`);
+        }
+      });
+      if (allNames.size >= targetCount) break;
+    }
+
+    const fragment = document.createDocumentFragment();
+    [...allNames].slice(0, targetCount).forEach(name => {
+      const span = document.createElement('span');
+      span.className = 'name-chip';
+      span.textContent = name;
+      fragment.appendChild(span);
+    });
+    nameContainer.appendChild(fragment);
+
     const runes = ['⚡', '∞', '★', '✦', '✧', '⬡', '✺', '☄'];
-    const container = document.querySelector('.floating-runes');
+    const runeContainer = document.querySelector('.floating-runes');
 
     function spawnRune() {
       const rune = document.createElement('div');
@@ -452,11 +621,9 @@
       rune.style.top = 100 + Math.random() * 40 + 'vh';
       rune.style.animationDuration = 8 + Math.random() * 6 + 's';
       rune.style.animationDelay = Math.random() * 2 + 's';
-      container.appendChild(rune);
+      runeContainer.appendChild(rune);
 
-      setTimeout(() => {
-        rune.remove();
-      }, 14000);
+      setTimeout(() => rune.remove(), 14000);
     }
 
     setInterval(spawnRune, 700);
