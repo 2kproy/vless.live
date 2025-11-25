@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLESS.LIVE — бессмертный протокол</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0c0f1a;
+      --bg-2: #11182b;
+      --bg-3: #0c0f1a;
+      --accent: #44d1ff;
+      --accent-2: #ff4ff6;
+      --glow: 0 0 20px rgba(68, 209, 255, 0.6);
+      --text: #d9e6ff;
+      --muted: #8aa2d3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(68, 209, 255, 0.12) 0, transparent 35%),
+                  radial-gradient(circle at 90% 10%, rgba(255, 79, 246, 0.14) 0, transparent 40%),
+                  radial-gradient(circle at 50% 80%, rgba(68, 209, 255, 0.18) 0, transparent 45%),
+                  linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .scan-lines::before {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      mix-blend-mode: overlay;
+      opacity: 0.5;
+      animation: scan 6s linear infinite;
+      z-index: 1;
+    }
+
+    .lang-toggle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 4;
+      display: inline-flex;
+      background: rgba(16, 23, 43, 0.82);
+      border: 1px solid rgba(68, 209, 255, 0.35);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+    }
+
+    .lang-toggle button {
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease;
+      font-family: 'Inter', 'Space Grotesk', system-ui, sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .lang-toggle button.active {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0b0f1a;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-10%); }
+      100% { transform: translateY(10%); }
+    }
+
+    header {
+      position: relative;
+      padding: 64px 24px 48px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      backdrop-filter: blur(6px);
+      background: rgba(14, 19, 38, 0.55);
+      border: 1px solid rgba(68, 209, 255, 0.3);
+      box-shadow: var(--glow), 0 30px 80px rgba(0,0,0,0.45);
+      border-radius: 20px;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: clamp(40px, 6vw, 72px);
+      margin: 0 0 12px;
+      letter-spacing: -1px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: var(--glow);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(68, 209, 255, 0.14);
+      color: var(--text);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      border: 1px solid rgba(68, 209, 255, 0.35);
+      box-shadow: var(--glow);
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 22px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0b0f1a;
+      font-weight: 700;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      box-shadow: 0 10px 30px rgba(68, 209, 255, 0.45);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 38px rgba(255, 79, 246, 0.35);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      padding: 32px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      position: relative;
+      background: rgba(16, 23, 43, 0.7);
+      border: 1px solid rgba(68, 209, 255, 0.25);
+      padding: 18px 18px 20px;
+      border-radius: 16px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 10% 10%, rgba(68, 209, 255, 0.12), transparent 35%);
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 79, 246, 0.45);
+    }
+
+    .card:hover::after { opacity: 1; }
+
+    .lab {
+      max-width: 1100px;
+      margin: 8px auto 48px;
+      padding: 0 24px;
+    }
+
+    .lab-head {
+      text-align: center;
+      margin: 24px 0 18px;
+    }
+
+    .lab-head h2 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -0.5px;
+    }
+
+    .lab-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .lab-card {
+      position: relative;
+      padding: 18px 18px 20px;
+      border-radius: 16px;
+      background: radial-gradient(circle at 12% 18%, rgba(68, 209, 255, 0.1), transparent 45%), rgba(16, 23, 43, 0.78);
+      border: 1px solid rgba(68, 209, 255, 0.26);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, rgba(68, 209, 255, 0.35), rgba(255, 79, 246, 0.35));
+      color: #0b0f1a;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      border: 1px solid rgba(68, 209, 255, 0.45);
+      box-shadow: var(--glow);
+    }
+
+    .lab-card h3 {
+      margin: 12px 0 8px;
+      font-size: 20px;
+    }
+
+    .lab-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .meter-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .meter-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 80px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .meter-label {
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .meter {
+      position: relative;
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      border: 1px solid rgba(68, 209, 255, 0.3);
+    }
+
+    .meter-fill {
+      position: absolute;
+      inset: 0;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      box-shadow: var(--glow);
+      transition: width 0.6s ease;
+    }
+
+    .meter-value {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .code {
+      background: rgba(11, 16, 32, 0.85);
+      border: 1px solid rgba(68, 209, 255, 0.35);
+      border-radius: 12px;
+      padding: 12px;
+      color: #cfe8ff;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow: auto;
+      box-shadow: inset 0 0 30px rgba(68, 209, 255, 0.12);
+      max-height: 240px;
+      width: calc(100% + 32px);
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+
+    .repo-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(68, 209, 255, 0.12);
+      border: 1px solid rgba(68, 209, 255, 0.3);
+      border-radius: 12px;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      margin-top: 10px;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+
+    .repo-button:hover {
+      border-color: rgba(255, 79, 246, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .idea-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      display: grid;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #f3f6ff;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .timeline {
+      max-width: 1100px;
+      margin: 32px auto 48px;
+      padding: 0 24px;
+    }
+
+    .timeline h2 {
+      margin: 0 0 16px;
+      font-size: 26px;
+      letter-spacing: -0.2px;
+    }
+
+    .timeline-list {
+      border-left: 2px solid rgba(68, 209, 255, 0.35);
+      padding-left: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 10px 14px 10px 18px;
+      background: rgba(16, 23, 43, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(68, 209, 255, 0.2);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      border-radius: 50%;
+      left: -25px;
+      top: 14px;
+      box-shadow: 0 0 14px rgba(68, 209, 255, 0.7);
+    }
+
+    .timeline-item h4 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .timeline-item span {
+      display: inline-block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer {
+      margin-top: 48px;
+      padding: 32px 24px 60px;
+      text-align: center;
+      background: rgba(12, 15, 26, 0.8);
+      border-top: 1px solid rgba(68, 209, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% -10%, rgba(255, 79, 246, 0.16), transparent 40%),
+                  radial-gradient(circle at 90% 50%, rgba(68, 209, 255, 0.12), transparent 45%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .footer h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .names {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+    }
+
+    .name-chip {
+      padding: 8px 12px;
+      background: rgba(16, 23, 43, 0.75);
+      border: 1px solid rgba(68, 209, 255, 0.3);
+      border-radius: 999px;
+      color: #f3f6ff;
+      font-weight: 600;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .corner-thanks {
+      position: fixed;
+      bottom: 14px;
+      right: 16px;
+      background: rgba(16, 23, 43, 0.86);
+      border: 1px solid rgba(68, 209, 255, 0.35);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+      z-index: 3;
+      backdrop-filter: blur(6px);
+    }
+
+    .corner-thanks a {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .floating-runes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .rune {
+      position: absolute;
+      font-size: 22px;
+      color: rgba(68, 209, 255, 0.2);
+      animation: float 10s ease-in-out infinite;
+      text-shadow: 0 0 12px rgba(68, 209, 255, 0.6);
+    }
+
+    @keyframes float {
+      0% { transform: translateY(20px) scale(1); opacity: 0; }
+      20% { opacity: 1; }
+      50% { transform: translateY(-10px) scale(1.1); }
+      100% { transform: translateY(-50px) scale(0.9); opacity: 0; }
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        padding: 24px 18px;
+      }
+      .grid { padding: 24px 18px; }
+      .timeline { padding: 0 18px; }
+      .corner-thanks { position: static; margin: 12px auto 0; max-width: 320px; }
+      .lang-toggle { top: 12px; right: 12px; }
+    }
+  </style>
+</head>
+<body class="scan-lines">
+  <div class="floating-runes" aria-hidden="true"></div>
+
+  <div class="lang-toggle" aria-label="Language switcher">
+    <button type="button" data-lang="ru" class="active">RU</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
+  <header>
+    <div class="hero">
+      <div class="badge" data-i18n-key="badge">vless.live / immortals only</div>
+      <h1 data-i18n-key="heroTitle">VLESS жив. Бессмертный. Неподконтрольный.</h1>
+      <p data-i18n-key="heroText">Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.</p>
+      <a class="cta" data-i18n-key="cta" href="https://github.com/search?q=vless" target="_blank" rel="noreferrer">Зарядиться энергией</a>
+    </div>
+  </header>
+
+  <section class="grid">
+    <div class="card">
+      <h3 data-i18n-key="cardAliveTitle">Живой манифест</h3>
+      <p data-i18n-key="cardAliveText">Без траура и RIP. vless.live — шумный световой сигнал, что VLESS не похоронить. Мы не смотрим назад, мы разгоняем настоящее и поджигаем будущее.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n-key="cardSpeedTitle">Гибкость & скорость</h3>
+      <p data-i18n-key="cardSpeedText">Минималистичный протокол, который любит свободу конфигурации. Быстро подстраивается под любые сетевые лабиринты и держит связь там, где другие угасают.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n-key="cardStealthTitle">Стелс режим</h3>
+      <p data-i18n-key="cardStealthText">VLESS умеет маскироваться. Добавь любимый транспорт, выбери свой стиль шифрования и оставайся невидимым. Мы — тени, которые сияют.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n-key="cardCommunityTitle">Комьюнити-форсаж</h3>
+      <p data-i18n-key="cardCommunityText">Открытый код, открытые идеи. Люди по всему миру прокачивают конфиги, пишут клиенты и держат огонь. Ты уже часть этой команды.</p>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <h2 data-i18n-key="timelineTitle">Как мы держим линию</h2>
+    <div class="timeline-list">
+      <div class="timeline-item">
+        <h4 data-i18n-key="timeline1Title">01. Разносим ограничения</h4>
+        <span data-i18n-key="timeline1Text">Встраиваемся в любые сценарии: self-hosted, домашние роутеры или облако на краю.</span>
+      </div>
+      <div class="timeline-item">
+        <h4 data-i18n-key="timeline2Title">02. Тюним как хотим</h4>
+        <span data-i18n-key="timeline2Text">WebSocket, gRPC, Reality, HTTP/2 или XHTTP — выбирай транспорт, меняй обёртку, оставайся онлайн.</span>
+      </div>
+      <div class="timeline-item">
+        <h4 data-i18n-key="timeline3Title">03. Маскируем трафик</h4>
+        <span data-i18n-key="timeline3Text">Нативная гибкость для обхода цензуры. VLESS выглядит так, как нужно тебе.</span>
+      </div>
+      <div class="timeline-item">
+        <h4 data-i18n-key="timeline4Title">04. Живём в коде</h4>
+        <span data-i18n-key="timeline4Text">Форки, плагины, патчи. Комьюнити — бесконечный двигатель, который не умеет останавливаться.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" aria-label="Комьюнити">
+    <div class="card">
+      <h3 data-i18n-key="cardPeopleTitle">Сила в людях</h3>
+      <p data-i18n-key="cardPeopleText">Разработчики, девопсы, энтузиасты — каждый добавляет свою искру. Здесь ценится любая помощь: баг-репорт или новый клиент.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n-key="cardDiyTitle">DIY дух</h3>
+      <p data-i18n-key="cardDiyText">Подними свой сервер, настрой балансировщики, сочини автоматизацию. VLESS принимает твой стиль без вопросов.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n-key="cardVibeTitle">Неоновый импульс</h3>
+      <p data-i18n-key="cardVibeText">Синтвейв-огни, спектральные акценты и ощущение, что сцена всегда включена. Мы — не траур, мы — ночной эфир.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n-key="cardJoinTitle">Присоединяйся</h3>
+      <p data-i18n-key="cardJoinText">Запусти ноду, сделай гайд, расскажи друзьям. Не важно, где ты — VLESS живёт там, где есть ты.</p>
+    </div>
+  </section>
+
+  <section class="lab">
+    <div class="lab-head">
+      <h2 data-i18n-key="labTitle">Сигнальная лаборатория</h2>
+      <p data-i18n-key="labSubtitle">Фишки, которые добавляют движ: живые метрики, стартовые конфиги и идеи, что можно докрутить дальше.</p>
+    </div>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="pill" data-i18n-key="labPulseTag">живой режим</div>
+        <h3 data-i18n-key="labPulseTitle">Пульс соединения</h3>
+        <p data-i18n-key="labPulseText">Фальшивая, но бодрая телеметрия для атмосферы. Пусть VLESS выглядит как станция, которая никогда не спит.</p>
+        <div class="meter-block">
+          <div class="meter-row">
+            <div class="meter-label" data-i18n-key="labMeterUptime">Аптайм</div>
+            <div class="meter"><div class="meter-fill" data-meter="uptime"></div></div>
+            <div class="meter-value" data-meter-value="uptime">99.9%</div>
+          </div>
+          <div class="meter-row">
+            <div class="meter-label" data-i18n-key="labMeterLatency">Пинг</div>
+            <div class="meter"><div class="meter-fill" data-meter="latency"></div></div>
+            <div class="meter-value" data-meter-value="latency">18 ms</div>
+          </div>
+          <div class="meter-row">
+            <div class="meter-label" data-i18n-key="labMeterThroughput">Пропускная</div>
+            <div class="meter"><div class="meter-fill" data-meter="throughput"></div></div>
+            <div class="meter-value" data-meter-value="throughput">1.4 Gbps</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <div class="pill" data-i18n-key="labConfigTag">starter kit</div>
+        <h3 data-i18n-key="labConfigTitle">Стартовый шаблон</h3>
+        <p data-i18n-key="labConfigText">Более реальный базовый inbound на Reality: подставь ключ, serverNames и цель, дальше настраивай под себя.</p>
+        <pre class="code" aria-label="VLESS starter config"><code data-i18n-key="labConfigCode">{
+  "inbounds": [
+    {
+      "tag": "VLESS_TCP_REALITY",
+      "port": 443,
+      "listen": "0.0.0.0",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "network": "raw",
+        "security": "reality",
+        "realitySettings": {
+          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",
+          "show": false,
+          "xver": 0,
+          "shortIds": [
+            ""
+          ],
+          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",
+          "serverNames": [
+            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"
+          ]
+        }
+      }
+    }
+  ]
+}</code></pre>
+      </div>
+
+      <div class="lab-card">
+        <div class="pill" data-i18n-key="labPurposeTag">зачем</div>
+        <h3 data-i18n-key="labPurposeTitle">Зачем этот сайт</h3>
+        <p data-i18n-key="labPurposeText" data-i18n-html="true">Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: предлагай issue и PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.</p>
+        <a class="repo-button" data-i18n-key="labPurposeCta" href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">Открыть репозиторий</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <h2 data-i18n-key="communityTitle">Большая благодарность комьюнити</h2>
+    <p data-i18n-key="communityText">Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.</p>
+    <div class="names" id="names"></div>
+  </footer>
+
+  <div class="corner-thanks">
+    Спасибо за вдохновение:
+    <br>remnowave — <a href="https://github.com/kastov" target="_blank" rel="noreferrer">kastov</a>
+    <br>remnashop — <a href="https://github.com/snoups" target="_blank" rel="noreferrer">snoups</a>
+    <br>yoxify — <a href="https://github.com/2kproy" target="_blank" rel="noreferrer">2kproy</a>
+  </div>
+
+  <script>
+    const translations = {
+      ru: {
+        badge: 'vless.live / бессмертный сигнал',
+        heroTitle: 'VLESS жив. Бессмертный. Неподконтрольный.',
+        heroText: 'Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.',
+        cta: 'Зарядиться энергией',
+        cardAliveTitle: 'Живой манифест',
+        cardAliveText: 'Без траура и RIP. vless.live — шумный световой сигнал, что VLESS не похоронить. Мы не смотрим назад, мы разгоняем настоящее и поджигаем будущее.',
+        cardSpeedTitle: 'Гибкость & скорость',
+        cardSpeedText: 'Минималистичный протокол, который любит свободу конфигурации. Быстро подстраивается под любые сетевые лабиринты и держит связь там, где другие угасают.',
+        cardStealthTitle: 'Стелс режим',
+        cardStealthText: 'VLESS умеет маскироваться. Добавь любимый транспорт, выбери свой стиль шифрования и оставайся невидимым. Мы — тени, которые сияют.',
+        cardCommunityTitle: 'Комьюнити-форсаж',
+        cardCommunityText: 'Открытый код, открытые идеи. Люди по всему миру прокачивают конфиги, пишут клиенты и держат огонь. Ты уже часть этой команды.',
+        timelineTitle: 'Как мы держим линию',
+        timeline1Title: '01. Разносим ограничения',
+        timeline1Text: 'Встраиваемся в любые сценарии: self-hosted, домашние роутеры или облако на краю.',
+        timeline2Title: '02. Тюним как хотим',
+        timeline2Text: 'WebSocket, gRPC, Reality, HTTP/2 или XHTTP — выбирай транспорт, меняй обёртку, оставайся онлайн.',
+        timeline3Title: '03. Маскируем трафик',
+        timeline3Text: 'Нативная гибкость для обхода цензуры. VLESS выглядит так, как нужно тебе.',
+        timeline4Title: '04. Живём в коде',
+        timeline4Text: 'Форки, плагины, патчи. Комьюнити — бесконечный двигатель, который не умеет останавливаться.',
+        cardPeopleTitle: 'Сила в людях',
+        cardPeopleText: 'Разработчики, девопсы, энтузиасты — каждый добавляет свою искру. Здесь ценится любая помощь: баг-репорт или новый клиент.',
+        cardDiyTitle: 'DIY дух',
+        cardDiyText: 'Подними свой сервер, настрой балансировщики, сочини автоматизацию. VLESS принимает твой стиль без вопросов.',
+        cardVibeTitle: 'Неоновый импульс',
+        cardVibeText: 'Синтвейв-огни, спектральные акценты и ощущение, что сцена всегда включена. Мы — не траур, мы — ночной эфир.',
+        cardJoinTitle: 'Присоединяйся',
+        cardJoinText: 'Запусти ноду, сделай гайд, расскажи друзьям. Не важно, где ты — VLESS живёт там, где есть ты.',
+        communityTitle: 'Большая благодарность комьюнити',
+        communityText: 'Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.',
+        labTitle: 'Сигнальная лаборатория',
+        labSubtitle: 'Фишки, которые добавляют движ: живые метрики, стартовые конфиги и идеи, что можно докрутить дальше.',
+        labPulseTag: 'живой режим',
+        labPulseTitle: 'Пульс соединения',
+        labPulseText: 'Фальшивая, но бодрая телеметрия для атмосферы. Пусть VLESS выглядит как станция, которая никогда не спит.',
+        labMeterUptime: 'Аптайм',
+        labMeterLatency: 'Пинг',
+        labMeterThroughput: 'Пропускная',
+        labConfigTag: 'starter kit',
+        labConfigTitle: 'Стартовый шаблон',
+        labConfigText: 'Более реальный базовый inbound на Reality: подставь ключ, serverNames и цель, дальше настраивай под себя.',
+        labConfigCode: '{\n  "inbounds": [\n    {\n      "tag": "VLESS_TCP_REALITY",\n      "port": 443,\n      "listen": "0.0.0.0",\n      "protocol": "vless",\n      "settings": {\n        "clients": [],\n        "decryption": "none"\n      },\n      "sniffing": {\n        "enabled": true,\n        "destOverride": [\n          "http",\n          "tls",\n          "quic"\n        ]\n      },\n      "streamSettings": {\n        "network": "raw",\n        "security": "reality",\n        "realitySettings": {\n          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",\n          "show": false,\n          "xver": 0,\n          "shortIds": [\n            ""\n          ],\n          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",\n          "serverNames": [\n            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"\n          ]\n        }\n      }\n    }\n  ]\n}',
+        labPurposeTag: 'зачем',
+        labPurposeTitle: 'Зачем этот сайт',
+        labPurposeText: 'Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: предлагай issue и PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.',
+        labPurposeCta: 'Открыть репозиторий'
+      },
+      en: {
+        badge: 'vless.live / immortal signal',
+        heroTitle: 'VLESS is alive. Immortal. Unstoppable.',
+        heroText: 'Not a memorial — a manifesto. A protocol that keeps evolving, smashing old barriers, and giving freedom to every connection. Here we celebrate the resilience of VLESS and everyone who fuels it.',
+        cta: 'Charge up',
+        cardAliveTitle: 'Living manifesto',
+        cardAliveText: 'No funerals, no RIP. vless.live is a loud neon flare that VLESS can’t be buried. We don’t look back — we accelerate the present and ignite the future.',
+        cardSpeedTitle: 'Agile & fast',
+        cardSpeedText: 'A minimalist protocol that loves configuration freedom. It adapts to any network maze and keeps the link alive where others fade.',
+        cardStealthTitle: 'Stealth mode',
+        cardStealthText: 'VLESS can blend in. Pick your transport, pick your encryption vibe, stay invisible. We’re the shadows that shine.',
+        cardCommunityTitle: 'Community overdrive',
+        cardCommunityText: 'Open code, open ideas. People worldwide tweak configs, ship clients, and keep the fire blazing. You’re already on the squad.',
+        timelineTitle: 'How we hold the line',
+        timeline1Title: '01. Breaking limits',
+        timeline1Text: 'We slot into any setup: self-hosted boxes, home routers, or edge cloud.',
+        timeline2Title: '02. Tuned our way',
+        timeline2Text: 'WebSocket, gRPC, Reality, HTTP/2 or XHTTP — pick the transport, wrap it how you like, stay online.',
+        timeline3Title: '03. Disguising traffic',
+        timeline3Text: 'Native flexibility to dodge censorship. VLESS looks exactly how you need it to.',
+        timeline4Title: '04. We live in code',
+        timeline4Text: 'Forks, plugins, patches. The community is a perpetual engine that refuses to stop.',
+        cardPeopleTitle: 'Power is people',
+        cardPeopleText: 'Developers, devops, enthusiasts — everyone adds a spark. Any help counts: a bug report or a brand-new client.',
+        cardDiyTitle: 'DIY spirit',
+        cardDiyText: 'Run your own server, tune balancers, script automation. VLESS welcomes your style without questions.',
+        cardVibeTitle: 'Neon pulse',
+        cardVibeText: 'Synthwave glow, spectral highlights, and the sense the stage is always on. Not a funeral — a midnight broadcast.',
+        cardJoinTitle: 'Jump in',
+        cardJoinText: 'Spin up a node, write a guide, tell your friends. Wherever you are, VLESS lives where you do.',
+        communityTitle: 'Massive thanks to the community',
+        communityText: 'Every nickname is a spark that keeps VLESS fighting. Thanks for making the protocol immortal.',
+        labTitle: 'Signal lab',
+        labSubtitle: 'Ideas to amp the page: ambient telemetry, starter configs, and hooks for future drops.',
+        labPulseTag: 'live mode',
+        labPulseTitle: 'Connection pulse',
+        labPulseText: 'Fake but fun telemetry for the vibe. Let VLESS feel like a station that never sleeps.',
+        labMeterUptime: 'Uptime',
+        labMeterLatency: 'Latency',
+        labMeterThroughput: 'Throughput',
+        labConfigTag: 'starter kit',
+        labConfigTitle: 'Starter template',
+        labConfigText: 'A more realistic Reality inbound base: drop your key, serverNames, and target, then tune the rest.',
+        labConfigCode: '{\n  "inbounds": [\n    {\n      "tag": "VLESS_TCP_REALITY",\n      "port": 443,\n      "listen": "0.0.0.0",\n      "protocol": "vless",\n      "settings": {\n        "clients": [],\n        "decryption": "none"\n      },\n      "sniffing": {\n        "enabled": true,\n        "destOverride": [\n          "http",\n          "tls",\n          "quic"\n        ]\n      },\n      "streamSettings": {\n        "network": "raw",\n        "security": "reality",\n        "realitySettings": {\n          "target": "#REPLACE_WITH_YOUR_DEST, EXAMPLE: example.com:443",\n          "show": false,\n          "xver": 0,\n          "shortIds": [\n            ""\n          ],\n          "privateKey": "#REPLACE_WITH_YOUR_PRIVATE_KEY, GENERATE BELOW ↓",\n          "serverNames": [\n            "#REPLACE_WITH_YOUR_SERVER_NAMES, EXAMPLE: example.com"\n          ]\n        }\n      }\n    }\n  ]\n}',
+        labPurposeTag: 'why',
+        labPurposeTitle: 'Why this site exists',
+        labPurposeText: 'Built as a playful shout that VLESS is alive. If the community wants, we can keep it rolling together: open issues and PRs in the <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">repo</a>. The plan: stash configs, links, and new finds right here.',
+        labPurposeCta: 'Open the repo'
+      }
+    };
+
+    const langButtons = document.querySelectorAll('.lang-toggle button');
+    const i18nElements = document.querySelectorAll('[data-i18n-key]');
+
+    const applyLang = (lang) => {
+      const pack = translations[lang] || translations.ru;
+      document.documentElement.lang = lang;
+      i18nElements.forEach(el => {
+        const key = el.dataset.i18nKey;
+        if (pack[key]) {
+          const useHtml = el.dataset.i18nHtml !== undefined;
+          if (useHtml) {
+            el.innerHTML = pack[key];
+          } else {
+            el.textContent = pack[key];
+          }
+        }
+      });
+      langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+      localStorage.setItem('vless-live-lang', lang);
+    };
+
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    const meters = {
+      uptime: document.querySelector('[data-meter="uptime"]'),
+      latency: document.querySelector('[data-meter="latency"]'),
+      throughput: document.querySelector('[data-meter="throughput"]')
+    };
+
+    const meterValues = {
+      uptime: document.querySelector('[data-meter-value="uptime"]'),
+      latency: document.querySelector('[data-meter-value="latency"]'),
+      throughput: document.querySelector('[data-meter-value="throughput"]')
+    };
+
+    function updateMeters() {
+      const uptimeVal = (99 + Math.random()).toFixed(2);
+      const latencyVal = Math.floor(12 + Math.random() * 25);
+      const throughputVal = (0.8 + Math.random() * 2.4).toFixed(2);
+
+      meters.uptime.style.width = `${Math.min(uptimeVal, 100)}%`;
+      meterValues.uptime.textContent = `${uptimeVal}%`;
+
+      const latencyPercent = Math.min(100, 120 - latencyVal);
+      meters.latency.style.width = `${latencyPercent}%`;
+      meterValues.latency.textContent = `${latencyVal} ms`;
+
+      const throughputPercent = Math.min(100, (throughputVal / 3.2) * 100);
+      meters.throughput.style.width = `${throughputPercent}%`;
+      meterValues.throughput.textContent = `${throughputVal} Gbps`;
+    }
+
+    updateMeters();
+    setInterval(updateMeters, 3200);
+
+    const savedLang = localStorage.getItem('vless-live-lang') || 'ru';
+    applyLang(savedLang);
+
+    const nameContainer = document.getElementById('names');
+    const seedNames = [
+      'stormbyte', 'nova42', 'netghost', 'ravenroot', 'ciphercat', 'packetrider', 'lumenix', 'zero-lag', 'matrixfox', 'xraypilot', 'bytegeist', 'stardust',
+      'remnowave', 'kastov', 'remnashop', 'snoups', 'yoxify', '2kproy', 'quantumflux', 'shadowline', 'meshrunner', 'warpdrive', 'edgeknight', 'vectorbolt',
+      '流火', '黑狐', '幽蓝', '极光雨', '雷影', '量子猫', '暮光行者', '星尘流', '北极光', '风暴客'
+    ];
+
+    const prefixes = ['neo', 'cyber', 'astro', 'meta', 'pulse', 'flux', 'hyper', 'ghost', 'zero', 'storm', 'nano', 'ultra', 'shadow', 'quant', 'lumen', 'xeno', 'byte', 'nova', 'vector', 'vortex', 'photon', 'silk', 'jade', 'ember', 'sky', 'crimson', 'violet', 'onyx', 'azure', 'jade', 'cryo', 'flare', 'infra', 'turbo', 'chrono'];
+    const suffixes = ['runner', 'blade', 'spark', 'drift', 'pilot', 'walker', 'caster', 'weaver', 'rider', 'carrier', 'shift', 'phase', 'dance', 'surge', 'pulse', 'loop', 'drive', 'trace', 'net', 'spear', 'bolt', 'signal', 'link', 'crest', 'flare', 'step', 'path', 'stream', 'dash', 'orbit'];
+    const special = ['红莲', '青霜', '夜空', '晨星', '银翼', '蓝图', '霓光', '光速', '深海', '山海', '竹影', '雷霆', '云端', '幻影', '星河', '疾风', '电弧', '量子', '磁暴', '雪豹', '极昼', '暮色', '烁星', '风行', '星痕'];
+
+    const allNames = new Set(seedNames);
+    const targetCount = 980;
+
+    for (const pre of prefixes) {
+      for (const suf of suffixes) {
+        if (allNames.size >= targetCount) break;
+        allNames.add(`${pre}${suf}`);
+      }
+      if (allNames.size >= targetCount) break;
+    }
+
+    let idx = 0;
+    while (allNames.size < targetCount && idx < special.length * 6) {
+      const name = `${special[idx % special.length]}-${Math.floor(idx / special.length) + 1}`;
+      allNames.add(name);
+      idx++;
+    }
+
+    const numberTrail = ['_01', '_07', '_13', '_21', '_33', '_44', '_56', '_64', '_77', '_88', '_99'];
+    for (const base of [...allNames]) {
+      if (allNames.size >= targetCount) break;
+      numberTrail.forEach(tag => {
+        if (allNames.size < targetCount) {
+          allNames.add(`${base}${tag}`);
+        }
+      });
+      if (allNames.size >= targetCount) break;
+    }
+
+    const fragment = document.createDocumentFragment();
+    [...allNames].slice(0, targetCount).forEach(name => {
+      const span = document.createElement('span');
+      span.className = 'name-chip';
+      span.textContent = name;
+      fragment.appendChild(span);
+    });
+    nameContainer.appendChild(fragment);
+
+    const runes = ['⚡', '∞', '★', '✦', '✧', '⬡', '✺', '☄'];
+    const runeContainer = document.querySelector('.floating-runes');
+
+    function spawnRune() {
+      const rune = document.createElement('div');
+      rune.className = 'rune';
+      rune.textContent = runes[Math.floor(Math.random() * runes.length)];
+      rune.style.left = Math.random() * 100 + 'vw';
+      rune.style.top = 100 + Math.random() * 40 + 'vh';
+      rune.style.animationDuration = 8 + Math.random() * 6 + 's';
+      rune.style.animationDelay = Math.random() * 2 + 's';
+      runeContainer.appendChild(rune);
+
+      setTimeout(() => rune.remove(), 14000);
+    }
+
+    setInterval(spawnRune, 700);
+    for (let i = 0; i < 14; i++) spawnRune();
+  </script>
+</body>
+</html>
