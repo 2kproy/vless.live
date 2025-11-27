@@ -1,9 +1,11 @@
-<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Remnawave logo">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#00e6ff" />
-      <stop offset="100%" stop-color="#d400ff" />
-    </linearGradient>
-  </defs>
-  <path d="M110 95c0-18 14.6-32.7 32.7-32.7h162.5c36.9 0 66.9 30 66.9 66.9V212c0 28.3-17.7 53.4-44.2 62.8l-126.6 46.3c-9.9 3.6-6.9 18.5 3.8 18.5h107.5c18.1 0 32.7 14.6 32.7 32.7s-14.6 32.7-32.7 32.7H142.7C124.6 405 110 390.4 110 372.3Z" fill="url(#grad)"/>
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.53">
+<path d="M50 75.0003C241.5 50.4996 114.015 428.648 166 436.395M434 102.5C313.5 210 228.414 445.697 166 436.395M166 436.395H434" stroke="url(#paint0_linear_172_821)" stroke-width="73" stroke-linecap="round"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_172_821" x1="395.5" y1="411" x2="111.5" y2="140" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D000FA"/>
+<stop offset="1" stop-color="#00E6FF"/>
+</linearGradient>
+</defs>
 </svg>
