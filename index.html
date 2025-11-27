@@ -166,6 +166,21 @@
       box-shadow: 0 16px 38px rgba(255, 79, 246, 0.35);
     }
 
+    .cta.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(68, 209, 255, 0.45);
+      box-shadow: none;
+    }
+
+    .cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -546,7 +561,10 @@
       <div class="badge" data-i18n-key="badge">vless.live / immortals only</div>
       <h1 data-i18n-key="heroTitle">VLESS жив. Бессмертный. Неподконтрольный.</h1>
       <p data-i18n-key="heroText">Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.</p>
-      <a class="cta" data-i18n-key="cta" href="https://github.com/search?q=vless" target="_blank" rel="noreferrer">Зарядиться энергией</a>
+      <div class="cta-group">
+        <a class="cta" data-i18n-key="cta" href="https://github.com/search?q=vless" target="_blank" rel="noreferrer">Зарядиться энергией</a>
+        <a class="cta secondary" data-i18n-key="genanaCta" href="/genana.html">Генератор инбаунтов ГенаНа</a>
+      </div>
     </div>
   </header>
 
@@ -712,6 +730,7 @@
         heroTitle: 'VLESS жив. Бессмертный. Неподконтрольный.',
         heroText: 'Это не мемориал — это манифест. Протокол, который гибко эволюционирует, ломает старые барьеры и дарит свободу соединения. Здесь мы празднуем живучесть VLESS и всех, кто его подпитывает.',
         cta: 'Зарядиться энергией',
+        genanaCta: 'Генератор инбаунтов ГенаНа',
         cardAliveTitle: 'Живой манифест',
         cardAliveText: 'Без траура и RIP. vless.live — шумный световой сигнал, что VLESS не похоронить. Мы не смотрим назад, мы разгоняем настоящее и поджигаем будущее.',
         cardSpeedTitle: 'Гибкость & скорость',
@@ -761,6 +780,7 @@
         heroTitle: 'VLESS is alive. Immortal. Unstoppable.',
         heroText: 'Not a memorial — a manifesto. A protocol that keeps evolving, smashing old barriers, and giving freedom to every connection. Here we celebrate the resilience of VLESS and everyone who fuels it.',
         cta: 'Charge up',
+        genanaCta: 'Genana inbound generator',
         cardAliveTitle: 'Living manifesto',
         cardAliveText: 'No funerals, no RIP. vless.live is a loud neon flare that VLESS can’t be buried. We don’t look back — we accelerate the present and ignite the future.',
         cardSpeedTitle: 'Agile & fast',
