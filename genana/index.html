@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Генератор инбаунтов Remnawave — vless.live</title>
+  <title>Генератор инбаундов Remnawave — vless.live</title>
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -236,10 +236,10 @@
         <img src="/logo.svg" alt="Remnawave logo">
         <div>
           <div class="badge">ГенаНа / Remnawave inbound lab</div>
-          <h1>Генератор инбаунтов для Xray</h1>
+          <h1>Генератор инбаундов для Xray</h1>
         </div>
       </div>
-      <p>Создай инбаунт в пару кликов, может даже заработает, но это не точно.</p>
+      <p>Создай инбаунд в пару кликов, может даже заработает, но это не точно.</p>
       <div class="cta-group">
         <a class="cta secondary" href="/">На главную</a>
         <button class="cta" id="copyBtn" type="button">Скопировать инбаунд</button>
@@ -355,7 +355,7 @@
           <div class="section-head">
             <div>
               <h2>Транспорт</h2>
-              <p>Все сетевые режимы Xray: TCP, WS, HTTPUpgrade, mKCP, QUIC, gRPC (gspc) и SplitHTTP.</p>
+              <p>Все сетевые режимы Xray: RAW, WS, HTTPUpgrade, XHTTP, mKCP, QUIC, gRPC (gspc) и SplitHTTP.</p>
             </div>
             <span class="pill">Stream settings</span>
           </div>
@@ -363,9 +363,10 @@
             <div class="field">
               <label for="network">Network</label>
               <select id="network">
-                <option value="tcp">tcp</option>
+                <option value="raw">raw</option>
                 <option value="ws">ws</option>
                 <option value="httpupgrade">httpupgrade</option>
+                <option value="xhttp">xhttp</option>
                 <option value="kcp">kcp</option>
                 <option value="quic">quic</option>
                 <option value="grpc">grpc (gspc)</option>
@@ -373,7 +374,7 @@
               </select>
             </div>
 
-            <div class="field" data-network="tcp">
+            <div class="field" data-network="raw">
               <label class="checkbox-row"><input type="checkbox" id="acceptProxy">acceptProxyProtocol</label>
             </div>
 
@@ -387,6 +388,16 @@
               <label for="httpPath">HTTPUpgrade path</label>
               <input id="httpPath" placeholder="/">
               <input id="httpHost" placeholder="Host">
+            </div>
+
+            <div class="field" data-network="xhttp">
+              <label for="xhttpHost">XHTTP host</label>
+              <input id="xhttpHost" placeholder="cdn.example.com">
+              <label for="xhttpPath">XHTTP path</label>
+              <input id="xhttpPath" placeholder="/">
+              <label for="xhttpMode">XHTTP mode</label>
+              <input id="xhttpMode" placeholder="auto">
+              <span class="muted">Поле mode можно оставить пустым, чтобы использовать значение по умолчанию из Xray.</span>
             </div>
 
             <div class="field" data-network="grpc">
@@ -594,8 +605,8 @@
       const network = networkSelect.value;
       const base = { network };
 
-      if (network === 'tcp') {
-        if (document.getElementById('acceptProxy').checked) base.tcpSettings = { acceptProxyProtocol: true };
+      if (network === 'raw') {
+        if (document.getElementById('acceptProxy').checked) base.rawSettings = { acceptProxyProtocol: true };
       }
       if (network === 'ws') {
         base.wsSettings = {
@@ -607,6 +618,14 @@
         base.httpupgradeSettings = {
           path: document.getElementById('httpPath').value.trim() || '/',
           host: document.getElementById('httpHost').value.trim()
+        };
+      }
+      if (network === 'xhttp') {
+        const hosts = parseList(document.getElementById('xhttpHost').value);
+        base.xhttpSettings = {
+          host: hosts.length ? hosts : undefined,
+          path: document.getElementById('xhttpPath').value.trim() || '/',
+          mode: document.getElementById('xhttpMode').value.trim() || undefined
         };
       }
       if (network === 'grpc') {
