@@ -190,9 +190,32 @@
     select option { background: #0f1528; color: #e8f0ff; }
 
     textarea { min-height: 380px; resize: vertical; font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace; line-height: 1.5; }
+    .output-panel textarea { min-height: 90vh; }
 
     .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
     .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); }
+    .checkbox-row input[type="checkbox"] {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(68, 209, 255, 0.35);
+      background: linear-gradient(135deg, #2b0f14, #3a1016);
+      box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.4);
+      transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      cursor: pointer;
+    }
+
+    .checkbox-row input[type="checkbox"]:checked {
+      background: linear-gradient(135deg, #0f2c1b, #0f3c25);
+      border-color: rgba(96, 255, 191, 0.7);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4), 0 0 18px rgba(79, 255, 180, 0.25);
+    }
+
+    .checkbox-row input[type="checkbox"]:focus-visible {
+      outline: 2px solid rgba(68, 209, 255, 0.6);
+      outline-offset: 2px;
+    }
 
     .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(68, 209, 255, 0.12); border: 1px solid rgba(68, 209, 255, 0.3); color: var(--text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
 
@@ -215,7 +238,7 @@
           <h1>Генератор инбаунтов для Xray</h1>
         </div>
       </div>
-      <p>Формирует корректные inbound-конфиги для панели Remnawave: все протоколы и транспорты Xray, TLS/REALITY и настройки снифинга. Поля синхронизированы в реальном времени.</p>
+      <p>Создай инбаунт в пару кликов, может даже заработает, но это не точно.</p>
       <div class="cta-group">
         <a class="cta secondary" href="/">На главную</a>
         <button class="cta" id="copyBtn" type="button">Скопировать инбаунд</button>
@@ -509,6 +532,12 @@
       });
     };
 
+    const handleVisibility = () => {
+      toggleVisibility(protocolFields, protocolSelect.value);
+      toggleVisibility(networkFields, networkSelect.value);
+      toggleVisibility(securityFields, securitySelect.value);
+    };
+
     const cleanObject = (obj) => {
       if (Array.isArray(obj)) return obj.map(cleanObject);
       if (obj && typeof obj === 'object') {
@@ -666,18 +695,16 @@
     };
 
     const attachRealtime = () => {
-      document.getElementById('genForm').addEventListener('input', generateInbound);
-      document.getElementById('genForm').addEventListener('change', generateInbound);
-      [networkSelect, securitySelect].forEach(sel => {
-        sel.addEventListener('change', () => {
-          toggleVisibility(networkFields, networkSelect.value);
-          toggleVisibility(securityFields, securitySelect.value);
-          generateInbound();
+      const controls = document.querySelectorAll('input, select, textarea');
+      controls.forEach(ctrl => {
+        ['input', 'change'].forEach(evt => {
+          ctrl.addEventListener(evt, () => {
+            if (ctrl === protocolSelect || ctrl === networkSelect || ctrl === securitySelect) {
+              handleVisibility();
+            }
+            generateInbound();
+          });
         });
-      });
-      protocolSelect.addEventListener('change', () => {
-        toggleVisibility(protocolFields, protocolSelect.value);
-        generateInbound();
       });
     };
 
@@ -690,9 +717,7 @@
     const init = () => {
       document.getElementById('port').value = 443;
       document.getElementById('remark').value = 'VLESS_TCP_REALITY';
-      toggleVisibility(protocolFields, protocolSelect.value);
-      toggleVisibility(networkFields, networkSelect.value);
-      toggleVisibility(securityFields, securitySelect.value);
+      handleVisibility();
       attachRealtime();
       generateInbound();
     };
