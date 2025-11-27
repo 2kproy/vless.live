@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генератор инбаунтов Remnawave — vless.live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0c0f1a;
+      --bg-2: #11182b;
+      --bg-3: #0c0f1a;
+      --accent: #44d1ff;
+      --accent-2: #ff4ff6;
+      --glow: 0 0 20px rgba(68, 209, 255, 0.6);
+      --text: #d9e6ff;
+      --muted: #8aa2d3;
+      --border: rgba(68, 209, 255, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(68, 209, 255, 0.12) 0, transparent 35%),
+                  radial-gradient(circle at 90% 10%, rgba(255, 79, 246, 0.14) 0, transparent 40%),
+                  radial-gradient(circle at 50% 80%, rgba(68, 209, 255, 0.18) 0, transparent 45%),
+                  linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .scan-lines::before {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      mix-blend-mode: overlay;
+      opacity: 0.5;
+      animation: scan 6s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-10%); }
+      100% { transform: translateY(10%); }
+    }
+
+    header {
+      position: relative;
+      padding: 48px 22px 28px;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .hero {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 22px;
+      backdrop-filter: blur(6px);
+      background: rgba(14, 19, 38, 0.72);
+      border: 1px solid var(--border);
+      box-shadow: var(--glow), 0 30px 80px rgba(0,0,0,0.45);
+      border-radius: 20px;
+    }
+
+    .brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .brand img {
+      width: 64px;
+      height: 64px;
+      filter: drop-shadow(0 10px 24px rgba(68, 209, 255, 0.35));
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: clamp(32px, 5vw, 56px);
+      margin: 0 0 10px;
+      letter-spacing: -1px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: var(--glow);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(68, 209, 255, 0.14);
+      color: var(--text);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--glow);
+      margin-bottom: 12px;
+    }
+
+    .hero p { margin: 0 0 16px; color: var(--muted); line-height: 1.6; }
+
+    .cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0b0f1a;
+      font-weight: 700;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      box-shadow: 0 10px 30px rgba(68, 209, 255, 0.45);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      font-size: 14px;
+    }
+
+    .cta.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); box-shadow: none; }
+    .cta:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 16px 38px rgba(255, 79, 246, 0.35); }
+
+    main { position: relative; z-index: 2; padding: 12px 20px 48px; max-width: 1240px; margin: 0 auto; }
+
+    .workspace { display: grid; grid-template-columns: minmax(360px, 1.05fr) minmax(320px, 0.95fr); gap: 16px; align-items: start; }
+    .stack { display: flex; flex-direction: column; gap: 16px; }
+
+    .panel {
+      background: rgba(16, 23, 43, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .section-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+    .section-head h2 { margin: 0; font-size: 20px; letter-spacing: -0.3px; }
+    .section-head p { margin: 0; color: var(--muted); max-width: 620px; line-height: 1.6; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1px solid rgba(68, 209, 255, 0.25); border-radius: 12px; background: rgba(255, 255, 255, 0.02); }
+    label { font-weight: 700; font-size: 14px; }
+    .muted { color: var(--muted); font-weight: 400; font-size: 13px; line-height: 1.4; }
+
+    input, select, textarea {
+      background: rgba(12, 16, 32, 0.9);
+      border: 1px solid rgba(68, 209, 255, 0.25);
+      color: var(--text);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      width: 100%;
+    }
+
+    select { appearance: none; background-image: linear-gradient(120deg, rgba(68,209,255,0.08), rgba(255,79,246,0.08)); }
+    select option { background: #0f1528; color: #e8f0ff; }
+
+    textarea { min-height: 380px; resize: vertical; font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace; line-height: 1.5; }
+
+    .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); }
+
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(68, 209, 255, 0.12); border: 1px solid rgba(68, 209, 255, 0.3); color: var(--text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .status { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+    .output-panel { position: sticky; top: 16px; }
+
+    @media (max-width: 960px) { .workspace { grid-template-columns: 1fr; } .output-panel { position: relative; top: 0; } }
+    @media (max-width: 720px) { header { padding: 28px 14px 12px; } main { padding: 8px 14px 36px; } }
+  </style>
+</head>
+<body class="scan-lines">
+  <header>
+    <div class="hero">
+      <div class="brand">
+        <img src="/logo.svg" alt="Remnawave logo">
+        <div>
+          <div class="badge">ГенаНа / Remnawave inbound lab</div>
+          <h1>Генератор инбаунтов для Xray</h1>
+        </div>
+      </div>
+      <p>Формирует корректные inbound-конфиги для панели Remnawave: все протоколы и транспорты Xray, TLS/REALITY и настройки снифинга. Поля синхронизированы в реальном времени.</p>
+      <div class="cta-group">
+        <a class="cta secondary" href="/">На главную</a>
+        <button class="cta" id="copyBtn" type="button">Скопировать инбаунд</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="workspace">
+      <div class="stack">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Основные поля</h2>
+              <p>Базовые параметры входящего подключения. Массив клиентов намеренно пустой для ручного управления в Remnawave.</p>
+            </div>
+            <span class="pill">Протоколы</span>
+          </div>
+          <form id="genForm" class="form-grid">
+            <div class="field">
+              <label for="remark">Ремарка / tag</label>
+              <input id="remark" placeholder="VLESS_TCP_REALITY">
+              <span class="muted">Нужна для идентификации инбаунда и fallback.</span>
+            </div>
+            <div class="field">
+              <label for="listen">Listen</label>
+              <input id="listen" placeholder="0.0.0.0">
+              <span class="muted">Оставь пустым для значения по умолчанию.</span>
+            </div>
+            <div class="field">
+              <label for="port">Порт</label>
+              <input id="port" type="number" placeholder="443" min="1" max="65535" required>
+            </div>
+            <div class="field">
+              <label for="protocol">Протокол</label>
+              <select id="protocol">
+                <option value="vless">VLESS</option>
+                <option value="vmess">VMess</option>
+                <option value="trojan">Trojan</option>
+                <option value="shadowsocks">Shadowsocks</option>
+                <option value="socks">Socks</option>
+                <option value="http">HTTP</option>
+                <option value="dokodemo-door">Dokodemo-door</option>
+              </select>
+            </div>
+
+            <div class="field" data-protocol="vmess">
+              <label for="alterId">alterId</label>
+              <input id="alterId" type="number" min="0" max="64" value="0">
+            </div>
+
+            <div class="field" data-protocol="vless">
+              <label for="vlessFlow">Flow</label>
+              <select id="vlessFlow">
+                <option value="">Без flow</option>
+                <option value="xtls-rprx-vision">xtls-rprx-vision</option>
+                <option value="xtls-rprx-vision-udp443">xtls-rprx-vision-udp443</option>
+              </select>
+            </div>
+
+            <div class="field" data-protocol="shadowsocks">
+              <label for="ssMethod">Shadowsocks method</label>
+              <select id="ssMethod">
+                <option value="aes-128-gcm">aes-128-gcm</option>
+                <option value="aes-256-gcm">aes-256-gcm</option>
+                <option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
+                <option value="2022-blake3-aes-128-gcm">2022-blake3-aes-128-gcm</option>
+                <option value="2022-blake3-aes-256-gcm">2022-blake3-aes-256-gcm</option>
+                <option value="2022-blake3-chacha20-poly1305">2022-blake3-chacha20-poly1305</option>
+              </select>
+            </div>
+            <div class="field" data-protocol="shadowsocks">
+              <label for="ssPassword">Пароль SS</label>
+              <input id="ssPassword" placeholder="password">
+            </div>
+
+            <div class="field" data-protocol="socks http">
+              <label for="socksAuth">Авторизация</label>
+              <select id="socksAuth">
+                <option value="noauth">Без авторизации</option>
+                <option value="password">Логин/пароль</option>
+              </select>
+              <div class="two-col">
+                <input id="socksUser" placeholder="user" aria-label="Логин">
+                <input id="socksPass" placeholder="pass" aria-label="Пароль">
+              </div>
+            </div>
+            <div class="field" data-protocol="socks">
+              <label class="checkbox-row"><input type="checkbox" id="socksUdp" checked>Включить UDP</label>
+            </div>
+            <div class="field" data-protocol="http">
+              <label class="checkbox-row"><input type="checkbox" id="httpTransparent">allowTransparent</label>
+              <span class="muted">Для HTTP авторизация подтягивается из полей выше.</span>
+            </div>
+
+            <div class="field" data-protocol="dokodemo-door">
+              <label for="dokoAddress">Адрес Dokodemo-door</label>
+              <input id="dokoAddress" placeholder="example.com или 1.1.1.1">
+            </div>
+            <div class="field" data-protocol="dokodemo-door">
+              <label for="dokoPort">Порт Dokodemo-door</label>
+              <input id="dokoPort" type="number" placeholder="443" min="1" max="65535">
+            </div>
+            <div class="field" data-protocol="dokodemo-door">
+              <label for="dokoNetwork">Сети</label>
+              <input id="dokoNetwork" placeholder="tcp,udp">
+              <label class="checkbox-row"><input type="checkbox" id="dokoRedirect">followRedirect</label>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Транспорт</h2>
+              <p>Все сетевые режимы Xray: TCP, WS, HTTPUpgrade, mKCP, QUIC, gRPC (gspc) и SplitHTTP.</p>
+            </div>
+            <span class="pill">Stream settings</span>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="network">Network</label>
+              <select id="network">
+                <option value="tcp">tcp</option>
+                <option value="ws">ws</option>
+                <option value="httpupgrade">httpupgrade</option>
+                <option value="kcp">kcp</option>
+                <option value="quic">quic</option>
+                <option value="grpc">grpc (gspc)</option>
+                <option value="splithttp">splithttp</option>
+              </select>
+            </div>
+
+            <div class="field" data-network="tcp">
+              <label class="checkbox-row"><input type="checkbox" id="acceptProxy">acceptProxyProtocol</label>
+            </div>
+
+            <div class="field" data-network="ws">
+              <label for="wsPath">WebSocket path</label>
+              <input id="wsPath" placeholder="/ws" value="/ws">
+              <input id="wsHost" placeholder="Host">
+            </div>
+
+            <div class="field" data-network="httpupgrade">
+              <label for="httpPath">HTTPUpgrade path</label>
+              <input id="httpPath" placeholder="/">
+              <input id="httpHost" placeholder="Host">
+            </div>
+
+            <div class="field" data-network="grpc">
+              <label for="grpcService">gRPC serviceName</label>
+              <input id="grpcService" placeholder="example.com" value="example.com">
+              <label for="grpcAuthority">authority</label>
+              <input id="grpcAuthority" placeholder="exaple-authority" value="exaple-authority">
+              <label class="checkbox-row"><input type="checkbox" id="grpcMulti">multiMode</label>
+            </div>
+
+            <div class="field" data-network="kcp">
+              <label for="kcpSeed">mKCP seed</label>
+              <input id="kcpSeed" placeholder="seed">
+              <select id="kcpType">
+                <option value="none">none</option>
+                <option value="srtp">srtp</option>
+                <option value="utp">utp</option>
+                <option value="wechat-video">wechat-video</option>
+                <option value="dtls">dtls</option>
+                <option value="wireguard">wireguard</option>
+              </select>
+            </div>
+
+            <div class="field" data-network="quic">
+              <label for="quicSecurity">QUIC security</label>
+              <input id="quicSecurity" placeholder="none">
+              <input id="quicKey" placeholder="key">
+              <select id="quicType">
+                <option value="none">none</option>
+                <option value="srtp">srtp</option>
+                <option value="utp">utp</option>
+                <option value="wechat-video">wechat-video</option>
+                <option value="dtls">dtls</option>
+                <option value="wireguard">wireguard</option>
+              </select>
+            </div>
+
+            <div class="field" data-network="splithttp">
+              <label for="splitHost">SplitHTTP host</label>
+              <input id="splitHost" placeholder="cdn.example.com">
+              <label for="splitPath">SplitHTTP path</label>
+              <input id="splitPath" placeholder="/">
+              <label for="splitConcurrency">Concurrency</label>
+              <input id="splitConcurrency" type="number" value="4" min="1" max="32">
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Шифрование и снифинг</h2>
+              <p>Выбери тип защиты, подставь свой домен для TLS или настройки REALITY. Кнопка копирования справа всегда отдаёт актуальный инбаунд.</p>
+            </div>
+            <span class="pill">Security & sniffing</span>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="security">Security</label>
+              <select id="security">
+                <option value="none">none</option>
+                <option value="tls">tls</option>
+                <option value="reality">reality</option>
+              </select>
+            </div>
+
+            <div class="field" data-security="tls">
+              <label for="tlsServer">Server Name (SNI)</label>
+              <input id="tlsServer" placeholder="example.com">
+              <label for="tlsAlpn">ALPN</label>
+              <input id="tlsAlpn" placeholder="h2,http/1.1">
+              <label class="checkbox-row"><input type="checkbox" id="tlsCustomDomain">Использовать свой домен и сертификаты</label>
+              <div class="two-col">
+                <input id="tlsKey" placeholder="/var/lib/remnawave/configs/xray/ssl/privkey.key" value="/var/lib/remnawave/configs/xray/ssl/privkey.key">
+                <input id="tlsCert" placeholder="/var/lib/remnawave/configs/xray/ssl/fullchain.pem" value="/var/lib/remnawave/configs/xray/ssl/fullchain.pem">
+              </div>
+            </div>
+
+            <div class="field" data-security="reality">
+              <label for="realityDest">Dest (host:port)</label>
+              <input id="realityDest" placeholder="example.com:443">
+              <label for="realityServerNames">Server Names</label>
+              <input id="realityServerNames" placeholder="example.com">
+              <label for="realityPrivateKey">Private key</label>
+              <input id="realityPrivateKey" placeholder=""> 
+              <label for="realityFingerprint">Fingerprint</label>
+              <input id="realityFingerprint" placeholder="chrome" value="chrome">
+              <label for="realitySpider">SpiderX</label>
+              <input id="realitySpider" placeholder="/">
+            </div>
+
+            <div class="field">
+              <label class="checkbox-row"><input type="checkbox" id="sniffing" checked>Включить снифинг</label>
+              <label class="checkbox-row"><input type="checkbox" id="metadataOnly">metadataOnly</label>
+              <div class="two-col">
+                <label class="checkbox-row"><input type="checkbox" value="http" checked>HTTP</label>
+                <label class="checkbox-row"><input type="checkbox" value="tls" checked>TLS</label>
+                <label class="checkbox-row"><input type="checkbox" value="quic">QUIC</label>
+                <label class="checkbox-row"><input type="checkbox" value="fakedns">FakeDNS</label>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel output-panel">
+        <div class="section-head">
+          <div>
+            <h2>Готовый инбаунд</h2>
+            <p>Обновляется на лету по мере ввода. Массив clients всегда пустой, чтобы Remnawave управлял доступом.</p>
+          </div>
+          <span class="pill">JSON</span>
+        </div>
+        <textarea id="output" readonly></textarea>
+        <div class="actions">
+          <button class="cta" type="button" id="copyBtnBottom">Скопировать</button>
+          <span class="status" id="status">Введи параметры, чтобы увидеть конфиг.</span>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const protocolFields = document.querySelectorAll('[data-protocol]');
+    const networkFields = document.querySelectorAll('[data-network]');
+    const securityFields = document.querySelectorAll('[data-security]');
+
+    const protocolSelect = document.getElementById('protocol');
+    const networkSelect = document.getElementById('network');
+    const securitySelect = document.getElementById('security');
+    const output = document.getElementById('output');
+    const statusEl = document.getElementById('status');
+
+    const destCheckboxes = document.querySelectorAll('.field input[type="checkbox"][value]');
+
+    const parseList = (value) => value.split(',').map(v => v.trim()).filter(Boolean);
+
+    const toggleVisibility = (nodes, activeValue) => {
+      nodes.forEach(node => {
+        const list = node.getAttribute('data-protocol') || node.getAttribute('data-network') || node.getAttribute('data-security');
+        if (!list) return;
+        const allowed = list.split(' ');
+        node.style.display = allowed.includes(activeValue) ? 'flex' : 'none';
+      });
+    };
+
+    const cleanObject = (obj) => {
+      if (Array.isArray(obj)) return obj.map(cleanObject);
+      if (obj && typeof obj === 'object') {
+        const cleaned = {};
+        Object.entries(obj).forEach(([key, value]) => {
+          const val = cleanObject(value);
+          if (val === undefined) return;
+          if (typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length === 0) return;
+          cleaned[key] = val;
+        });
+        return cleaned;
+      }
+      if (obj === '' || obj === null) return undefined;
+      return obj;
+    };
+
+    const buildSettings = () => {
+      switch (protocolSelect.value) {
+        case 'vless':
+          return { clients: [], decryption: 'none', flow: document.getElementById('vlessFlow').value || undefined };
+        case 'vmess':
+          return { clients: [], disableInsecureEncryption: false, default: { alterId: Number(document.getElementById('alterId').value || 0) } };
+        case 'trojan':
+          return { clients: [], fallback: [] };
+        case 'shadowsocks':
+          return { clients: [], method: document.getElementById('ssMethod').value, password: document.getElementById('ssPassword').value.trim() };
+        case 'socks':
+          return {
+            auth: document.getElementById('socksAuth').value,
+            accounts: document.getElementById('socksAuth').value === 'password' ? [{ user: document.getElementById('socksUser').value, pass: document.getElementById('socksPass').value }] : [],
+            udp: document.getElementById('socksUdp').checked,
+            ip: document.getElementById('listen').value.trim()
+          };
+        case 'http':
+          return {
+            auth: document.getElementById('socksAuth').value,
+            accounts: document.getElementById('socksAuth').value === 'password' ? [{ user: document.getElementById('socksUser').value, pass: document.getElementById('socksPass').value }] : [],
+            allowTransparent: document.getElementById('httpTransparent').checked
+          };
+        case 'dokodemo-door':
+          return {
+            address: document.getElementById('dokoAddress').value.trim(),
+            port: Number(document.getElementById('dokoPort').value || 0),
+            network: document.getElementById('dokoNetwork').value.trim() || 'tcp,udp',
+            followRedirect: document.getElementById('dokoRedirect').checked
+          };
+        default:
+          return {};
+      }
+    };
+
+    const buildStreamSettings = () => {
+      const network = networkSelect.value;
+      const base = { network };
+
+      if (network === 'tcp') {
+        if (document.getElementById('acceptProxy').checked) base.tcpSettings = { acceptProxyProtocol: true };
+      }
+      if (network === 'ws') {
+        base.wsSettings = {
+          path: document.getElementById('wsPath').value.trim() || '/',
+          headers: document.getElementById('wsHost').value.trim() ? { Host: document.getElementById('wsHost').value.trim() } : undefined
+        };
+      }
+      if (network === 'httpupgrade') {
+        base.httpupgradeSettings = {
+          path: document.getElementById('httpPath').value.trim() || '/',
+          host: document.getElementById('httpHost').value.trim()
+        };
+      }
+      if (network === 'grpc') {
+        base.grpcSettings = {
+          serviceName: document.getElementById('grpcService').value.trim(),
+          authority: document.getElementById('grpcAuthority').value.trim(),
+          multiMode: document.getElementById('grpcMulti').checked
+        };
+      }
+      if (network === 'kcp') {
+        base.kcpSettings = {
+          seed: document.getElementById('kcpSeed').value.trim(),
+          header: { type: document.getElementById('kcpType').value }
+        };
+      }
+      if (network === 'quic') {
+        base.quicSettings = {
+          security: document.getElementById('quicSecurity').value.trim() || 'none',
+          key: document.getElementById('quicKey').value.trim(),
+          header: { type: document.getElementById('quicType').value }
+        };
+      }
+      if (network === 'splithttp') {
+        base.splitHttpSettings = {
+          host: parseList(document.getElementById('splitHost').value),
+          path: document.getElementById('splitPath').value.trim() || '/',
+          concurrency: Number(document.getElementById('splitConcurrency').value || 4)
+        };
+      }
+
+      const security = securitySelect.value;
+      base.security = security;
+
+      if (security === 'tls') {
+        base.tlsSettings = {
+          serverName: document.getElementById('tlsServer').value.trim(),
+          alpn: parseList(document.getElementById('tlsAlpn').value)
+        };
+        if (document.getElementById('tlsCustomDomain').checked) {
+          base.tlsSettings.certificates = [
+            {
+              usage: 'encipherment',
+              keyFile: document.getElementById('tlsKey').value.trim() || '/var/lib/remnawave/configs/xray/ssl/privkey.key',
+              buildChain: false,
+              oneTimeLoading: false,
+              certificateFile: document.getElementById('tlsCert').value.trim() || '/var/lib/remnawave/configs/xray/ssl/fullchain.pem'
+            }
+          ];
+        }
+      }
+
+      if (security === 'reality') {
+        base.realitySettings = {
+          show: false,
+          dest: document.getElementById('realityDest').value.trim(),
+          serverNames: parseList(document.getElementById('realityServerNames').value),
+          privateKey: document.getElementById('realityPrivateKey').value.trim(),
+          shortIds: [],
+          fingerprint: document.getElementById('realityFingerprint').value.trim() || 'chrome',
+          spiderX: document.getElementById('realitySpider').value.trim() || '/'
+        };
+      }
+
+      return base;
+    };
+
+    const buildSniffing = () => {
+      if (!document.getElementById('sniffing').checked) return undefined;
+      const overrides = Array.from(destCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+      return { enabled: true, destOverride: overrides, metadataOnly: document.getElementById('metadataOnly').checked };
+    };
+
+    const generateInbound = () => {
+      const inbound = {
+        tag: document.getElementById('remark').value.trim() || `${protocolSelect.value.toUpperCase()}_${Date.now()}`,
+        listen: document.getElementById('listen').value.trim(),
+        port: Number(document.getElementById('port').value || 0),
+        protocol: protocolSelect.value,
+        settings: buildSettings(),
+        streamSettings: buildStreamSettings(),
+        sniffing: buildSniffing()
+      };
+
+      const cleaned = cleanObject(inbound);
+      output.value = JSON.stringify(cleaned, null, 2);
+      statusEl.textContent = 'Готово! Инбаунд обновлён.';
+    };
+
+    const attachRealtime = () => {
+      document.getElementById('genForm').addEventListener('input', generateInbound);
+      document.getElementById('genForm').addEventListener('change', generateInbound);
+      [networkSelect, securitySelect].forEach(sel => {
+        sel.addEventListener('change', () => {
+          toggleVisibility(networkFields, networkSelect.value);
+          toggleVisibility(securityFields, securitySelect.value);
+          generateInbound();
+        });
+      });
+      protocolSelect.addEventListener('change', () => {
+        toggleVisibility(protocolFields, protocolSelect.value);
+        generateInbound();
+      });
+    };
+
+    const copyHandler = async () => {
+      if (!output.value) return;
+      await navigator.clipboard.writeText(output.value);
+      statusEl.textContent = 'Скопировано в буфер обмена';
+    };
+
+    const init = () => {
+      document.getElementById('port').value = 443;
+      document.getElementById('remark').value = 'VLESS_TCP_REALITY';
+      toggleVisibility(protocolFields, protocolSelect.value);
+      toggleVisibility(networkFields, networkSelect.value);
+      toggleVisibility(securityFields, securitySelect.value);
+      attachRealtime();
+      generateInbound();
+    };
+
+    document.getElementById('copyBtn').addEventListener('click', copyHandler);
+    document.getElementById('copyBtnBottom').addEventListener('click', copyHandler);
+
+    init();
+  </script>
+</body>
+</html>
