@@ -448,6 +448,84 @@
       font-size: 14px;
     }
 
+    .cybpe-board {
+      max-width: 1100px;
+      margin: 24px auto 0;
+      padding: 24px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 10% 0%, rgba(68, 209, 255, 0.12), transparent 38%),
+                  radial-gradient(circle at 90% 20%, rgba(255, 79, 246, 0.14), transparent 42%),
+                  rgba(12, 15, 26, 0.8);
+      border: 1px solid rgba(68, 209, 255, 0.3);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45), var(--glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cybpe-board::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: 16px;
+      border: 1px dashed rgba(68, 209, 255, 0.2);
+      pointer-events: none;
+    }
+
+    .cybpe-header {
+      text-align: center;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cybpe-header h2 {
+      margin: 10px 0 6px;
+      font-size: 22px;
+    }
+
+    .cybpe-header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .cybpe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cybpe-card {
+      padding: 12px;
+      background: rgba(16, 23, 43, 0.82);
+      border: 1px solid rgba(68, 209, 255, 0.32);
+      border-radius: 16px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.42);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .cybpe-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .cybpe-frame {
+      border-radius: 12px;
+      border: 1px solid rgba(255, 79, 246, 0.35);
+      padding: 8px;
+      background: linear-gradient(135deg, rgba(68, 209, 255, 0.18), rgba(255, 79, 246, 0.18));
+      box-shadow: inset 0 0 18px rgba(68, 209, 255, 0.18);
+      overflow: hidden;
+    }
+
+    .cybpe-frame img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      filter: saturate(1.1) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.38));
+    }
+
     .footer {
       margin-top: 48px;
       padding: 32px 24px 60px;
@@ -711,13 +789,22 @@
 }</code></pre>
       </div>
 
-      <div class="lab-card">
-        <div class="pill" data-i18n-key="labPurposeTag">зачем</div>
-        <h3 data-i18n-key="labPurposeTitle">Зачем этот сайт</h3>
-        <p data-i18n-key="labPurposeText" data-i18n-html="true">Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: предлагай issue и PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.</p>
-        <a class="repo-button" data-i18n-key="labPurposeCta" href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">Открыть репозиторий</a>
-      </div>
+    <div class="lab-card">
+      <div class="pill" data-i18n-key="labPurposeTag">зачем</div>
+      <h3 data-i18n-key="labPurposeTitle">Зачем этот сайт</h3>
+      <p data-i18n-key="labPurposeText" data-i18n-html="true">Это просто прикол и напоминание, что VLESS жив. Если комьюнити захочет — поддержим вместе: предлагай issue и PR в <a href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">репозиторий</a>. Планируем собирать тут полезное: конфиги, ссылки и свежие находки.</p>
+      <a class="repo-button" data-i18n-key="labPurposeCta" href="https://github.com/2kproy/vless.live/" target="_blank" rel="noreferrer">Открыть репозиторий</a>
     </div>
+  </div>
+</section>
+
+  <section class="cybpe-board">
+    <div class="cybpe-header">
+      <div class="pill">cybpe</div>
+      <h2 data-i18n-key="cybpeTitle">Список дебилов</h2>
+      <p data-i18n-key="cybpeText">Дебил — это вери лайт. Считай не оскорбление.</p>
+    </div>
+    <div class="cybpe-grid" id="cybpe-grid"></div>
   </section>
 
   <footer class="footer">
@@ -766,6 +853,8 @@
         cardVibeText: 'Синтвейв-огни, спектральные акценты и ощущение, что сцена всегда включена. Мы — не траур, мы — ночной эфир.',
         cardJoinTitle: 'Присоединяйся',
         cardJoinText: 'Запусти ноду, сделай гайд, расскажи друзьям. Не важно, где ты — VLESS живёт там, где есть ты.',
+        cybpeTitle: 'Список дебилов',
+        cybpeText: 'Дебил — это вери лайт. Считай не оскорбление.',
         communityTitle: 'Большая благодарность комьюнити',
         communityText: 'Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.',
         labTitle: 'Сигнальная лаборатория',
@@ -816,6 +905,8 @@
         cardVibeText: 'Synthwave glow, spectral highlights, and the sense the stage is always on. Not a funeral — a midnight broadcast.',
         cardJoinTitle: 'Jump in',
         cardJoinText: 'Spin up a node, write a guide, tell your friends. Wherever you are, VLESS lives where you do.',
+        cybpeTitle: 'cybpe “List of goofs”',
+        cybpeText: '“Debil” is super light here — think of it as friendly teasing.',
         communityTitle: 'Massive thanks to the community',
         communityText: 'Every nickname is a spark that keeps VLESS fighting. Thanks for making the protocol immortal.',
         labTitle: 'Signal lab',
@@ -896,6 +987,34 @@
 
     const savedLang = localStorage.getItem('vless-live-lang') || 'ru';
     applyLang(savedLang);
+
+    const cybpeGrid = document.getElementById('cybpe-grid');
+    const cybpeImages = [
+      {
+        src: 'https://s.iimg.su/s/01/th_gnpDfWGxRCgwPqU4rqLrlFzUAD7IXCQCLmJASdRQ.png',
+        alt: 'cybpe slot 01'
+      }
+    ];
+
+    if (cybpeGrid) {
+      const cybpeFragment = document.createDocumentFragment();
+      cybpeImages.forEach(({ src, alt }) => {
+        const card = document.createElement('div');
+        card.className = 'cybpe-card';
+
+        const frame = document.createElement('div');
+        frame.className = 'cybpe-frame';
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = alt || 'cybpe slot';
+
+        frame.appendChild(img);
+        card.appendChild(frame);
+        cybpeFragment.appendChild(card);
+      });
+      cybpeGrid.appendChild(cybpeFragment);
+    }
 
     const nameContainer = document.getElementById('names');
     const seedNames = [
