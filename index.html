@@ -450,25 +450,16 @@
 
     .cybpe-board {
       max-width: 1100px;
-      margin: 24px auto 0;
+      margin: 32px auto 24px;
       padding: 24px;
       border-radius: 18px;
       background: radial-gradient(circle at 10% 0%, rgba(68, 209, 255, 0.12), transparent 38%),
                   radial-gradient(circle at 90% 20%, rgba(255, 79, 246, 0.14), transparent 42%),
                   rgba(12, 15, 26, 0.8);
-      border: 1px solid rgba(68, 209, 255, 0.3);
+      border: 1px solid rgba(68, 209, 255, 0.35);
       box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45), var(--glow);
       position: relative;
       overflow: hidden;
-    }
-
-    .cybpe-board::before {
-      content: "";
-      position: absolute;
-      inset: 1px;
-      border-radius: 16px;
-      border: 1px dashed rgba(68, 209, 255, 0.2);
-      pointer-events: none;
     }
 
     .cybpe-header {
@@ -512,17 +503,21 @@
 
     .cybpe-frame {
       border-radius: 12px;
-      border: 1px solid rgba(255, 79, 246, 0.35);
+      border: 1px solid rgba(68, 209, 255, 0.6);
       padding: 8px;
-      background: linear-gradient(135deg, rgba(68, 209, 255, 0.18), rgba(255, 79, 246, 0.18));
-      box-shadow: inset 0 0 18px rgba(68, 209, 255, 0.18);
+      background: rgba(12, 16, 32, 0.78);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
       overflow: hidden;
     }
 
     .cybpe-frame img {
-      width: 100%;
       display: block;
+      margin: 0 auto;
+      height: 150px;
+      max-width: 100%;
+      width: auto;
       border-radius: 10px;
+      object-fit: contain;
       filter: saturate(1.1) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.38));
     }
 
@@ -798,20 +793,20 @@
   </div>
 </section>
 
-  <section class="cybpe-board">
-    <div class="cybpe-header">
-      <div class="pill">cybpe</div>
-      <h2 data-i18n-key="cybpeTitle">Список дебилов</h2>
-      <p data-i18n-key="cybpeText">Дебил — это вери лайт. Считай не оскорбление.</p>
-    </div>
-    <div class="cybpe-grid" id="cybpe-grid"></div>
-  </section>
-
   <footer class="footer">
     <h2 data-i18n-key="communityTitle">Большая благодарность комьюнити</h2>
     <p data-i18n-key="communityText">Каждый ник — искра, которая держит VLESS в строю. Спасибо, что делаете протокол бессмертным.</p>
     <div class="names" id="names"></div>
   </footer>
+
+  <section class="cybpe-board">
+    <div class="cybpe-header">
+      <div class="pill">Список дебилов</div>
+      <h2 data-i18n-key="cybpeTitle">Список дебилов</h2>
+      <p data-i18n-key="cybpeText">Дебил — это вери лайт. Считай не оскорбление.</p>
+    </div>
+    <div class="cybpe-grid" id="cybpe-grid"></div>
+  </section>
 
   <div class="corner-thanks">
     Спасибо за вдохновение:
